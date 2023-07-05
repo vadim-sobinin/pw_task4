@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Nokwy.otf",
+      "sha1": "09d4325743a4ff1e59a5cddc9e811183973cb266"
+    },
+    {
+      "path": "assets/fonts/Outfit.ttf",
+      "sha1": "0b864532623abe9e381ab191b4eb66021db9829d"
+    }
+  ]
+}
