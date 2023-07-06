@@ -1,8 +1,15 @@
-import {Pressable, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useContext, useEffect} from 'react';
 import Card from './Card';
-import {useQuery} from '@apollo/client';
-import {GET_MYPOST} from '../../../apollo/requests';
+import {useMutation, useQuery} from '@apollo/client';
+import {DELETE_POST, GET_MYPOST} from '../../../apollo/requests';
 import Spinner from '../../../ui/Spinner';
 import {AuthContext} from '../../../context/AuthContext';
 import {MyPostsData, NavigationProps, Post} from '../../../@types/types';
@@ -33,9 +40,27 @@ const MyPosts = () => {
     },
   );
 
-  // useEffect(() => {
-  //   refetch({variables: {}});
-  // }, []);
+  const [deleteReq] = useMutation(DELETE_POST, {
+    context: {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`,
+      },
+    },
+    onCompleted: () => {
+      refetch({});
+    },
+  });
+
+  const deletePost = (id: string) => {
+    deleteReq({
+      variables: {
+        input: {
+          id: id,
+        },
+      },
+    });
+  };
 
   if (loading || !data) {
     return <Spinner />;
@@ -61,7 +86,11 @@ const MyPosts = () => {
                   <Card data={item} />
                 </Pressable>
               )}
-              renderHiddenItem={renderHiddenItem}
+              renderHiddenItem={data => {
+                return (
+                  <RenderHiddenItem deletePost={deletePost} data={data.item} />
+                );
+              }}
               rightOpenValue={-73}
               disableRightSwipe={true}
             />
@@ -75,14 +104,25 @@ const MyPosts = () => {
 
 export default MyPosts;
 
-const renderHiddenItem = () => (
-  <View style={styles.rowBack}>
-    <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
-      <Icon name="trash" type="ionicon" color="#fff" size={32} />
-      <Text style={styles.text}>Delete</Text>
-    </View>
-  </View>
-);
+const RenderHiddenItem = ({
+  deletePost,
+  data,
+}: {
+  deletePost: (id: string) => void;
+  data: Post;
+}) => {
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      style={styles.rowBack}
+      onPress={() => deletePost(data.id)}>
+      <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
+        <Icon name="trash" type="ionicon" color="#fff" size={32} />
+        <Text style={styles.text}>Delete</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   body: {

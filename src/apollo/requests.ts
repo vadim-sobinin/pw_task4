@@ -199,3 +199,12 @@ export const CREATE_POST = gql`
     }
   }
 `;
+
+export const DELETE_POST = gql`
+  mutation DeletePost($input: PostIdRequest!) {
+    postDelete(input: $input) {
+      id
+      ok
+    }
+  }
+`;
