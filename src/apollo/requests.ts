@@ -177,3 +177,25 @@ export const EDIT_PROFILE = gql`
     }
   }
 `;
+
+export const CREATE_POST = gql`
+  mutation CreatePost($input: CreatePostRequest!) {
+    postCreate(input: $input) {
+      author {
+        avatarUrl
+        firstName
+        lastName
+      }
+      authorId
+      createdAt
+      deletedAt
+      description
+      id
+      isLiked
+      likesCount
+      mediaUrl
+      title
+      updatedAt
+    }
+  }
+`;

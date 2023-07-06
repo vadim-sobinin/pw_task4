@@ -16,6 +16,7 @@ import FullPost from '../screens/main/componets/FullPost';
 import CreatePost from '../screens/main/componets/CreatePost';
 import {AuthContext} from '../context/AuthContext';
 import ProfileScreen from '../screens/profile/ProfileScreen';
+import {User} from '../@types/types';
 
 const Drawer = createDrawerNavigator();
 
@@ -78,15 +79,23 @@ function CustomDrawerContent(props) {
       marginTop: 12,
     },
   });
-
-  const {logout} = useContext(AuthContext);
+  // @ts-ignore
+  const {logout, userInfo}: {userInfo: User} = useContext(AuthContext);
   const noAvatarUrl =
     'https://w7.pngwing.com/pngs/686/219/png-transparent-youtube-user-computer-icons-information-youtube-hand-silhouette-avatar.png';
   return (
     <DrawerContentScrollView {...props} style={styles.container}>
       <View style={styles.avatarBlock}>
-        <Avatar rounded source={{uri: noAvatarUrl}} size={80} />
-        <Text style={styles.username}>New User</Text>
+        <Avatar
+          rounded
+          source={{uri: userInfo.avatarUrl || noAvatarUrl}}
+          size={80}
+        />
+        <Text style={styles.username}>
+          {userInfo.firstName && userInfo.lastName
+            ? `${userInfo.firstName} ${userInfo.lastName}`
+            : 'New User'}
+        </Text>
       </View>
       <View>
         <View>

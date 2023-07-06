@@ -1,16 +1,24 @@
 import {Platform} from 'react-native';
 import ImagePicker, {Image, Options} from 'react-native-image-crop-picker';
 
-const RESIZED_IMAGE_WIDTH = 400;
-const RESIZED_IMAGE_HEIGHT = 400;
+// const RESIZED_IMAGE_WIDTH = 400;
+// const RESIZED_IMAGE_HEIGHT = 400;
 
 const useGetPicture = () => {
-  const getImage = async (isCamera?: boolean) => {
+  const getImage = async (
+    isCamera?: boolean,
+    cropping = true,
+    circle = false,
+  ) => {
     const imagePickerOptions: Options = {
-      width: RESIZED_IMAGE_WIDTH,
-      height: RESIZED_IMAGE_HEIGHT,
+      // width: RESIZED_IMAGE_WIDTH,
+      // height: RESIZED_IMAGE_HEIGHT,
+      cropping: false,
       mediaType: 'photo',
+      compressImageQuality: 0.3, //1
       maxFiles: 1,
+      cropperCircleOverlay: circle,
+      freeStyleCropEnabled: true,
       // forceJpg: true,
       includeBase64: true,
       cropperToolbarTitle: 'Отредактируйте ваше фото',
@@ -33,7 +41,7 @@ const useGetPicture = () => {
       } else {
         const imageOptions = {
           ...imagePickerOptions,
-          cropping: true,
+          cropping: cropping,
           maxFiles: 1,
           includeBase64: true,
         };

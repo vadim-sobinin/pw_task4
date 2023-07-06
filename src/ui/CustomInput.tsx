@@ -8,6 +8,7 @@ type inputProps = {
   name: string;
   placeholder: string;
   secureTextEntry?: boolean;
+  multiline?: boolean;
   rules?: Omit<
     RegisterOptions,
     'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
@@ -21,6 +22,7 @@ const CustomInput = ({
   name,
   placeholder,
   secureTextEntry = false,
+  multiline = false,
   label,
 }: inputProps) => {
   return (
@@ -33,6 +35,7 @@ const CustomInput = ({
           <Input
             placeholder={placeholder}
             placeholderTextColor={error ? '#C2534C' : '#9B9B9B'}
+            multiline={multiline}
             inputStyle={{
               color: error ? '#C2534C' : '#131313',
               fontSize: 16,

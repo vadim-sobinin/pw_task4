@@ -41,15 +41,6 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
     setIsLoading(false);
   };
 
-  const delImage = () => {
-    if (userInfo) {
-      const newData = {...userInfo};
-      newData.avatarUrl = null;
-      setUserInfo(newData);
-      AsyncStorage.setItem('userInfo', JSON.stringify(newData));
-    }
-  };
-
   const isLoggedIn = async () => {
     try {
       setIsLoading(true);
@@ -84,7 +75,6 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
         userInfo,
         register,
         update,
-        delImage,
       }}>
       {children}
     </AuthContext.Provider>

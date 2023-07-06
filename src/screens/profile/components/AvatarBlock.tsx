@@ -30,7 +30,7 @@ const AvatarBlock = ({image, setImage, updateProfile}: AvatarProps) => {
   const [showPhotoModal, setShowPhotoModal] = useState(false);
 
   // @ts-ignore
-  const {userInfo, delImage}: {userInfo: User} = useContext(AuthContext);
+  const {userInfo}: {userInfo: User} = useContext(AuthContext);
 
   const {getImage} = useGetPicture();
 
@@ -40,7 +40,7 @@ const AvatarBlock = ({image, setImage, updateProfile}: AvatarProps) => {
     setShowPhotoModal(false);
   };
   const choosePhotoFromLibrary = async () => {
-    const recivedImage = await getImage(false);
+    const recivedImage = await getImage(false, true, true);
     setImage(recivedImage);
     setShowPhotoModal(false);
   };

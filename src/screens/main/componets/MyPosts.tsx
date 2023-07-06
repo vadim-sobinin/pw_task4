@@ -1,54 +1,41 @@
-import {
-  FlatList,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, { useContext, useState } from 'react';
+import {Pressable, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import React, {useContext, useEffect} from 'react';
 import Card from './Card';
-import { ApolloError, useQuery } from '@apollo/client';
-import { GET_FAVORITES, GET_MYPOST, GET_POSTS } from '../../../apollo/requests';
+import {useQuery} from '@apollo/client';
+import {GET_MYPOST} from '../../../apollo/requests';
 import Spinner from '../../../ui/Spinner';
-import { AuthContext } from '../../../context/AuthContext';
-import {
-  FavoritesData,
-  MyPostsData,
-  NavigationProps,
-  Post,
-  PostsReqData,
-  User,
-} from '../../../@types/types';
+import {AuthContext} from '../../../context/AuthContext';
+import {MyPostsData, NavigationProps, Post} from '../../../@types/types';
 import NoFavorites from './NoFavorites';
 import Header from './Header';
 import AddPostLink from './AddPostLink';
-import { SwipeListView } from 'react-native-swipe-list-view';
-import { Icon } from '@rneui/themed';
-import { useNavigation } from '@react-navigation/native';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import {Icon} from '@rneui/themed';
+import {useNavigation} from '@react-navigation/native';
 
 const MyPosts = () => {
   // @ts-ignore
-  const { userToken, userInfo } = useContext(AuthContext);
+  const {userToken, userInfo} = useContext(AuthContext);
   const navigation = useNavigation<NavigationProps>();
-  const { loading, error, data, refetch } = useQuery<MyPostsData | undefined>(GET_MYPOST, {
-    variables: {
-      input: {},
-    },
-    context: {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`,
+  const {loading, error, data, refetch} = useQuery<MyPostsData | undefined>(
+    GET_MYPOST,
+    {
+      variables: {
+        input: {},
       },
+      context: {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`,
+        },
+      },
+      // onCompleted(data) {},
     },
-    onCompleted(data) {},
-  });
+  );
 
-  const createPost = () => {
-    navigation.navigate('CreatePost');
-  };
+  // useEffect(() => {
+  //   refetch({variables: {}});
+  // }, []);
 
   if (loading || !data) {
     return <Spinner />;
@@ -66,10 +53,10 @@ const MyPosts = () => {
           ) : (
             <SwipeListView
               data={data.myPosts.data}
-              renderItem={({ item }: { item: Post }) => (
+              renderItem={({item}: {item: Post}) => (
                 <Pressable
                   onPress={() => {
-                    navigation.navigate('FullCard', { data: item });
+                    navigation.navigate('FullCard', {data: item});
                   }}>
                   <Card data={item} />
                 </Pressable>

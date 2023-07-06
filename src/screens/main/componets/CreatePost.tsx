@@ -1,45 +1,119 @@
 import {
-  Button,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
-import { Icon, Input } from '@rneui/themed';
-import { useNavigation } from '@react-navigation/native';
-import { NavigationProps } from '../../../@types/types';
-import ImagePicker from 'react-native-image-crop-picker';
-import { KeyboardShift } from '../../../components/KeyboardShift';
+import React, {useContext, useState} from 'react';
+import {Icon, Image} from '@rneui/themed';
+import {useNavigation} from '@react-navigation/native';
+import {NavigationProps} from '../../../@types/types';
+import {KeyboardShift} from '../../../components/KeyboardShift';
 import ButtonComponent from '../../../ui/Button';
+
+import useGetPicture from '../../../components/useGetPicture';
+import {imageType} from '../../profile/components/AvatarBlock';
+import {useForm} from 'react-hook-form';
+import CustomInput from '../../../ui/CustomInput';
+import axios from 'axios';
+import {CREATE_POST} from '../../../apollo/requests';
+import {useMutation} from '@apollo/client';
+import {AuthContext} from '../../../context/AuthContext';
+import Spinner from '../../../ui/Spinner';
+
+const signURL = 'https://internship-social-media.purrweb.com/v1/aws/signed-url';
+
+const getRandomInt = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+type createPostRequestBody = {
+  description: string;
+  title: string;
+  mediaUrl?: string;
+};
 
 const CreatePost = () => {
   const navigation = useNavigation<NavigationProps>();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [title, setTitle] = useState('');
-  const [post, setPost] = useState('');
+  const [image, setImage] = useState<imageType | null>(null);
 
-  const [titleInputColor, setTitleInputColor] = useState('#9B9B9B');
-  const [postInputColor, setPostInputColor] = useState('#9B9B9B');
+  // @ts-ignore
+  const {userToken} = useContext(AuthContext);
 
-  const isPostReady = Boolean(title && post && true);
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm();
 
-  const choosePhoto = () => {
-    // ImagePicker.openPicker({
-    //   width: 300,
-    //   height: 400,
-    //   cropping: true,
-    // }).then((image) => {
-    //   console.log(image);
-    // });
+  const {getImage} = useGetPicture();
+
+  const choosePhoto = async () => {
+    const recivedImage = await getImage(false, false, false);
+    setImage(recivedImage);
   };
+
+  const [createPost] = useMutation(CREATE_POST, {
+    context: {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`,
+      },
+    },
+
+    onError(error) {
+      console.log('onError error:', error);
+    },
+    // refetchQueries: () => [
+    //   {
+    //     query: GET_MYPOST,
+    //     variables: {},
+    //   },
+    // ],
+  });
+
+  const onSubmitPressed = async (data: any) => {
+    setIsLoading(true);
+    const input: createPostRequestBody = {
+      description: data.postText,
+      title: data.title,
+    };
+    // console.log(data);
+    if (image) {
+      try {
+        const response = await axios({
+          url: signURL,
+          params: {
+            fileName: `${getRandomInt(1, 10000000)}.jpg`,
+            fileCategory: 'POSTS',
+          },
+          headers: {Authorization: `Bearer ${userToken}`},
+        });
+
+        input.mediaUrl = response.data.split('?')[0];
+
+        await fetch(response.data, {
+          method: 'put',
+          body: image.source,
+          headers: {
+            'Content-Type': 'application/octet-stream',
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    await createPost({variables: {input: input}});
+    setIsLoading(false);
+    navigation.goBack();
+  };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -70,40 +144,52 @@ const CreatePost = () => {
       </View>
       <KeyboardShift>
         <View style={styles.content}>
-          <TouchableOpacity style={styles.uploadBlock}>
-            <Icon name="cloud-upload" type="ionicon" color="#87B71F" size={36} />
-            <Text style={styles.uploadText}>Upload your photo here</Text>
-          </TouchableOpacity>
-          <Input
-            placeholder={`Enter title of post`}
-            placeholderTextColor={'#9B9B9B'}
-            errorStyle={{ color: '#C2534C', fontSize: 14, lineHeight: 20 }}
-            errorMessage="Enter title of post"
-            inputStyle={{ color: '#131313', fontSize: 16 }}
-            inputContainerStyle={{ borderColor: titleInputColor }}
-            onFocus={() => setTitleInputColor('#131313')}
-            onBlur={() => setTitleInputColor('#9B9B9B')}
-            onChangeText={setTitle}
-            value={title}
-            label={'Title'}
-            labelStyle={styles.label}
+          {image ? (
+            <Image style={styles.image} source={{uri: image.source.uri}} />
+          ) : (
+            <TouchableOpacity style={styles.uploadBlock} onPress={choosePhoto}>
+              <Icon
+                name="cloud-upload"
+                type="ionicon"
+                color="#87B71F"
+                size={36}
+              />
+              <Text style={styles.uploadText}>Upload your photo here</Text>
+            </TouchableOpacity>
+          )}
+          <CustomInput
+            control={control}
+            placeholder="Enter title of post"
+            name="title"
+            label="Title"
+            rules={{
+              required: {value: true, message: 'Enter your post title'},
+              minLength: {
+                value: 5,
+                message: 'Title must be longer than or equal to 5 characters',
+              },
+            }}
           />
-          <Input
-            placeholder={`Enter your post`}
-            placeholderTextColor={'#9B9B9B'}
-            errorStyle={{ color: '#C2534C', fontSize: 14, lineHeight: 20 }}
-            errorMessage="Enter your post"
-            inputStyle={{ color: '#131313', fontSize: 16 }}
-            inputContainerStyle={{ borderColor: postInputColor }}
-            onFocus={() => setPostInputColor('#131313')}
-            onBlur={() => setPostInputColor('#9B9B9B')}
-            onChangeText={setPost}
-            value={post}
-            label={'Post'}
-            labelStyle={styles.label}
+          <CustomInput
+            control={control}
+            placeholder="Enter your post"
+            name="postText"
+            label="Post"
+            rules={{
+              required: {value: true, message: 'Enter your post text'},
+              minLength: {
+                value: 40,
+                message:
+                  'Description must be longer than or equal to 40 characters',
+              },
+            }}
             multiline={true}
           />
-          <ButtonComponent disabled={!isPostReady} style={{ marginTop: 52 }}>
+
+          <ButtonComponent
+            disabled={!(!errors.title?.type && Boolean(image))}
+            style={{marginTop: 52}}
+            onPress={handleSubmit(onSubmitPressed)}>
             Publish
           </ButtonComponent>
         </View>
@@ -129,6 +215,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 14,
     color: '#131313',
+  },
+  image: {
+    borderRadius: 24,
+    height: 166,
+    marginBottom: 40,
   },
   uploadBlock: {
     backgroundColor: '#F4F5F4',
