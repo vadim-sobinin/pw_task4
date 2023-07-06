@@ -19,6 +19,11 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
     setIsLoading(false);
   };
 
+  const update = (data: User) => {
+    setUserInfo(data);
+    AsyncStorage.setItem('userInfo', JSON.stringify(data));
+  };
+
   const logout = () => {
     setIsLoading(true);
     setUserToken(null);
@@ -36,11 +41,21 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
     setIsLoading(false);
   };
 
+  const delImage = () => {
+    if (userInfo) {
+      const newData = {...userInfo};
+      newData.avatarUrl = null;
+      setUserInfo(newData);
+      AsyncStorage.setItem('userInfo', JSON.stringify(newData));
+    }
+  };
+
   const isLoggedIn = async () => {
     try {
       setIsLoading(true);
       let userToken = await AsyncStorage.getItem('userToken');
       setUserToken(userToken);
+      console.log(userToken);
       let userInfo = await AsyncStorage.getItem('userInfo');
       if (userInfo) {
         const userInfoParced = await JSON.parse(userInfo);
@@ -61,7 +76,16 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
   return (
     // @ts-ignore
     <AuthContext.Provider
-      value={{login, logout, isLoading, userToken, userInfo, register}}>
+      value={{
+        login,
+        logout,
+        isLoading,
+        userToken,
+        userInfo,
+        register,
+        update,
+        delImage,
+      }}>
       {children}
     </AuthContext.Provider>
   );

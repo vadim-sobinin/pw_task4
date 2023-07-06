@@ -1,7 +1,7 @@
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 type StackParamList = {
-  FullCard: { data: Post };
+  FullCard: {data: Post};
   CreatePost: {};
 };
 

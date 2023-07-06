@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import {gql} from '@apollo/client';
 
 export const SING_UP = gql`
   mutation signUp($input: SignUpRequest!) {
@@ -142,6 +142,36 @@ export const GET_MYPOST = gql`
         likesCount
         mediaUrl
         title
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const EDIT_PROFILE = gql`
+  mutation editProfile($input: EditProfileRequest!) {
+    userEditProfile(input: $input) {
+      problem {
+        ... on EmailAlreadyUsedProblem {
+          message
+        }
+        ... on PhoneAlreadyUsedProblem {
+          message
+        }
+      }
+      user {
+        avatarUrl
+        birthDate
+        country
+        createdAt
+        deletedAt
+        email
+        firstName
+        gender
+        id
+        lastName
+        middleName
+        phone
         updatedAt
       }
     }

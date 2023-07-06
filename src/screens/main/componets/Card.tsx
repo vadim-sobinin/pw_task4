@@ -1,10 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { useContext, useState } from 'react';
-import { Avatar, Icon, Image } from '@rneui/themed';
-import { LikeData, Post } from '../../../@types/types';
-import { useMutation } from '@apollo/client';
-import { GET_FAVORITES, GET_POSTS, LIKE_POST, UNLIKE_POST } from '../../../apollo/requests';
-import { AuthContext } from '../../../context/AuthContext';
+import {StyleSheet, Text, View} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {Avatar, Icon, Image} from '@rneui/themed';
+import {LikeData, Post} from '../../../@types/types';
+import {useMutation} from '@apollo/client';
+import {
+  GET_FAVORITES,
+  GET_POSTS,
+  LIKE_POST,
+  UNLIKE_POST,
+} from '../../../apollo/requests';
+import {AuthContext} from '../../../context/AuthContext';
 
 export const convertDate = (date: string) => {
   let dateInProcess = date.slice(0, 10).split('-');
@@ -12,10 +17,10 @@ export const convertDate = (date: string) => {
   return dateInProcess.reverse().join('.');
 };
 
-const Card = ({ data }: { data: Post }) => {
+const Card = ({data}: {data: Post}) => {
   // const [cardData, setCardData] = useState(data);
   // @ts-ignore
-  const { userToken } = useContext(AuthContext);
+  const {userToken} = useContext(AuthContext);
 
   const [likePost] = useMutation(LIKE_POST, {
     variables: {
@@ -90,11 +95,11 @@ const Card = ({ data }: { data: Post }) => {
           <Text style={styles.date}>{convertDate(data.createdAt)}</Text>
         </View>
         <View style={styles.body}>
-          <Image source={{ uri: data.mediaUrl }} style={styles.image} />
+          <Image source={{uri: data.mediaUrl}} style={styles.image} />
         </View>
         <View style={styles.footer}>
           <View style={styles.author}>
-            <Avatar source={{ uri: data.author.avatarUrl }} rounded size={24} />
+            <Avatar source={{uri: data.author.avatarUrl}} rounded size={24} />
             <Text style={styles.name}>
               {data.author.firstName || 'New'}{' '}
               {data.author.lastName ? data.author.lastName.slice(0, 1) : 'user'}
@@ -109,7 +114,12 @@ const Card = ({ data }: { data: Post }) => {
               color="#000000"
             />
             <Text style={styles.counterText}>{data.likesCount}</Text>
-            <Icon name="share-social" size={20} type="ionicon" color="#000000" />
+            <Icon
+              name="share-social"
+              size={20}
+              type="ionicon"
+              color="#000000"
+            />
           </View>
         </View>
       </View>
@@ -120,7 +130,7 @@ const Card = ({ data }: { data: Post }) => {
 export default Card;
 
 const styles = StyleSheet.create({
-  gap: { paddingBottom: 4 },
+  gap: {paddingBottom: 4},
   container: {
     backgroundColor: '#F4F5F4',
     paddingTop: 24,
