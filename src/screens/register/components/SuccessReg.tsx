@@ -1,10 +1,13 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-
+import React, {useContext} from 'react';
 import {Icon} from '@rneui/themed';
 import ButtonComponent from '../../../ui/Button';
+import {User} from '../../../@types/types';
+import {AuthContext} from '../../../context/AuthContext';
 
-const SuccessReg = () => {
+const SuccessReg = ({route}: {route: {params: {data: User}}}) => {
+  // @ts-ignore
+  const {register} = useContext(AuthContext);
   return (
     <View style={styles.container}>
       <View style={styles.congrats}>
@@ -15,7 +18,9 @@ const SuccessReg = () => {
         <Text style={styles.text}>You have been registered</Text>
       </View>
 
-      <ButtonComponent>Continue</ButtonComponent>
+      <ButtonComponent onPress={() => register(route.params.data)}>
+        Continue
+      </ButtonComponent>
     </View>
   );
 };
@@ -28,6 +33,8 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     justifyContent: 'center',
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   congrats: {
     backgroundColor: '#87B71F',

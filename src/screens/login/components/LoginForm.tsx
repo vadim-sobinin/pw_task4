@@ -9,18 +9,13 @@ import {LoginData} from '../../../@types/types';
 import {useForm} from 'react-hook-form';
 import CustomInput from '../../../ui/CustomInput';
 
-type errorType = {
+export type errorType = {
   errors: string[];
   field: string;
 };
 
 const LoginForm = ({navigation}: {navigation: any}) => {
-  const {
-    control,
-    handleSubmit,
-    setError,
-    // formState: {errors},
-  } = useForm();
+  const {control, handleSubmit, setError} = useForm();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 

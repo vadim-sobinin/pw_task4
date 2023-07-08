@@ -78,6 +78,12 @@ const ProfileScreen = () => {
     },
     onCompleted(data: any) {
       if (data.userEditProfile.problem) {
+        if (data.userEditProfile.problem.message === 'Email already in use') {
+          setError('email', {
+            type: 'custom',
+            message: data.userEditProfile.problem.message,
+          });
+        }
         console.log('onComplete error', data.userEditProfile.problem.message);
       } else {
         update(data.userEditProfile.user);
@@ -88,11 +94,7 @@ const ProfileScreen = () => {
     },
   });
 
-  const {
-    control,
-    handleSubmit,
-    // formState: {errors},
-  } = useForm<formInputsType>({
+  const {control, handleSubmit, setError} = useForm<formInputsType>({
     defaultValues: {
       firstName: userInfo.firstName,
       lastName: userInfo.middleName,

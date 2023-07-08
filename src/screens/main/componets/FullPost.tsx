@@ -1,19 +1,26 @@
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import React, { useContext } from 'react';
-import { NavigationProps, Post } from '../../../@types/types';
-import { Avatar, Icon } from '@rneui/themed';
-import { useNavigation } from '@react-navigation/native';
-import { convertDate } from './Card';
-import { AuthContext } from '../../../context/AuthContext';
-import { useMutation } from '@apollo/client';
-import { GET_FAVORITES, LIKE_POST, UNLIKE_POST } from '../../../apollo/requests';
+import {
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useContext} from 'react';
+import {NavigationProps, Post} from '../../../@types/types';
+import {Avatar, Icon} from '@rneui/themed';
+import {useNavigation} from '@react-navigation/native';
+import {convertDate} from './Card';
+import {AuthContext} from '../../../context/AuthContext';
+import {useMutation} from '@apollo/client';
+import {GET_FAVORITES, LIKE_POST, UNLIKE_POST} from '../../../apollo/requests';
 
-const FullPost = ({ route }: { route: { params: { data: Post } } }) => {
+const FullPost = ({route}: {route: {params: {data: Post}}}) => {
   const navigation = useNavigation<NavigationProps>();
   const data = route.params.data;
 
   // @ts-ignore
-  const { userToken } = useContext(AuthContext);
+  const {userToken} = useContext(AuthContext);
 
   const [likePost] = useMutation(LIKE_POST, {
     variables: {
@@ -106,11 +113,11 @@ const FullPost = ({ route }: { route: { params: { data: Post } } }) => {
           </View>
         </View>
         <Text style={styles.date}>{convertDate(data.createdAt)}</Text>
-        <Image style={styles.image} source={{ uri: data.mediaUrl }} />
+        <Image style={styles.image} source={{uri: data.mediaUrl}} />
         <Text style={styles.description}>{data.description}</Text>
         <View style={styles.footer}>
           <View style={styles.author}>
-            <Avatar source={{ uri: data.author.avatarUrl }} rounded size={24} />
+            <Avatar source={{uri: data.author.avatarUrl}} rounded size={24} />
             <Text style={styles.name}>
               {data.author.firstName || 'New'}{' '}
               {data.author.lastName ? data.author.lastName.slice(0, 1) : 'user'}
@@ -125,7 +132,12 @@ const FullPost = ({ route }: { route: { params: { data: Post } } }) => {
               color="#000000"
             />
             <Text style={styles.counterText}>{data.likesCount}</Text>
-            <Icon name="share-social" size={20} type="ionicon" color="#000000" />
+            <Icon
+              name="share-social"
+              size={20}
+              type="ionicon"
+              color="#000000"
+            />
           </View>
         </View>
       </ScrollView>

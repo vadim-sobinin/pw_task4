@@ -1,29 +1,15 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
-import {Icon, Input} from '@rneui/themed';
+import {Icon} from '@rneui/themed';
+import {Control, FieldValues, UseFormWatch} from 'react-hook-form';
+import CustomInput from '../../../ui/CustomInput';
 
 type RegisterFormProps = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  setEmail: (str: string) => void;
-  setPassword: (str: string) => void;
-  setConfirmPassword: (str: string) => void;
+  control: Control;
+  watch: UseFormWatch<FieldValues>;
 };
 
-const RegisterForm = ({
-  email,
-  password,
-  confirmPassword,
-  setEmail,
-  setPassword,
-  setConfirmPassword,
-}: RegisterFormProps) => {
-  const [emailInputColor, setEmailInputColor] = useState('#9B9B9B');
-  const [passwordInputColor, setPasswordInputColor] = useState('#9B9B9B');
-  const [confirmPasswordInputColor, setConfirmPasswordInputColor] =
-    useState('#9B9B9B');
-
+const RegisterForm = ({control, watch}: RegisterFormProps) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
@@ -36,85 +22,71 @@ const RegisterForm = ({
         </Text>
       </View>
       <View style={styles.formBlock}>
-        <Input
-          placeholder={'Enter your email'}
-          placeholderTextColor={'#9B9B9B'}
-          errorStyle={{color: '#C2534C', fontSize: 14, lineHeight: 20}}
-          errorMessage="Enter correct e-mail"
-          inputStyle={{color: '#131313', fontSize: 16}}
-          inputContainerStyle={{borderColor: emailInputColor}}
-          onFocus={() => setEmailInputColor('#131313')}
-          onBlur={() => setEmailInputColor('#9B9B9B')}
-          onChangeText={setEmail}
-          value={email}
-          label={'E-mail'}
-          labelStyle={styles.label}
+        <CustomInput
+          control={control}
+          placeholder="Enter your email"
+          name="email"
+          label="E-mail"
+          rules={{required: {value: true, message: 'E-mail is required!'}}}
         />
 
-        <Input
-          placeholder={'Enter your password'}
-          placeholderTextColor={'#9B9B9B'}
-          errorStyle={{color: '#C2534C', fontSize: 14, lineHeight: 20}}
-          errorMessage="Enter correct password"
-          inputStyle={{color: '#131313', fontSize: 16}}
-          inputContainerStyle={{borderColor: passwordInputColor}}
-          onFocus={() => setPasswordInputColor('#131313')}
-          onBlur={() => setPasswordInputColor('#9B9B9B')}
-          onChangeText={setPassword}
+        <CustomInput
+          control={control}
+          placeholder="Enter your password"
+          name="password"
+          label="Password"
+          rules={{required: {value: true, message: 'Password is required!'}}}
+          secureTextEntry={!passwordVisible}
           rightIcon={
             passwordVisible ? (
               <Icon
                 name="eye-outline"
                 type="ionicon"
-                color={passwordInputColor}
+                color="#9B9B9B"
                 onPress={() => setPasswordVisible(false)}
               />
             ) : (
               <Icon
                 name="eye-off-outline"
                 type="ionicon"
-                color={passwordInputColor}
+                color="#9B9B9B"
                 onPress={() => setPasswordVisible(true)}
               />
             )
           }
-          secureTextEntry={!passwordVisible}
-          value={password}
-          label={'Password'}
-          labelStyle={styles.label}
         />
 
-        <Input
-          placeholder={'Confirm your password'}
-          placeholderTextColor={'#9B9B9B'}
-          errorStyle={{color: '#C2534C', fontSize: 14, lineHeight: 20}}
-          errorMessage="Enter correct password"
-          inputStyle={{color: '#131313', fontSize: 16}}
-          inputContainerStyle={{borderColor: confirmPasswordInputColor}}
-          onFocus={() => setConfirmPasswordInputColor('#131313')}
-          onBlur={() => setConfirmPasswordInputColor('#9B9B9B')}
-          onChangeText={setConfirmPassword}
+        <CustomInput
+          control={control}
+          placeholder="Confirm your password"
+          name="confirmPassword"
+          label="Confirm password"
+          rules={{
+            required: {value: true, message: 'Confirm password is required!'},
+            validate: (val: string) => {
+              if (watch('password') != val) {
+                return 'Your passwords do no match';
+              }
+            },
+          }}
+          secureTextEntry={!confirmPasswordVisible}
           rightIcon={
             confirmPasswordVisible ? (
               <Icon
                 name="eye-outline"
                 type="ionicon"
-                color={confirmPasswordInputColor}
+                color="#9B9B9B"
                 onPress={() => setConfirmPasswordVisible(false)}
               />
             ) : (
               <Icon
                 name="eye-off-outline"
                 type="ionicon"
-                color={confirmPasswordInputColor}
+                color="#9B9B9B"
                 onPress={() => setConfirmPasswordVisible(true)}
               />
             )
           }
-          secureTextEntry={!confirmPasswordVisible}
-          value={confirmPassword}
-          label={'Confirm password'}
-          labelStyle={styles.label}
         />
       </View>
     </View>

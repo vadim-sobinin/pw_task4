@@ -1,4 +1,4 @@
-import {View, Alert, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import React from 'react';
 
 import ButtonComponent from '../../../ui/Button';
@@ -11,9 +11,6 @@ const Footer = ({
   navigation: any;
   onPress: () => void;
 }) => {
-  const pressBtn = () => {
-    Alert.alert('Hi');
-  };
   return (
     <View style={styles.container}>
       <View style={styles.textWrapper}>

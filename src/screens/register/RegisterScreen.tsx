@@ -1,43 +1,51 @@
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import React, {useContext, useState} from 'react';
+import React from 'react';
 import RegisterForm from './components/RegisterForm';
 import Footer from './components/Footer';
 import {useMutation} from '@apollo/client';
 import {SING_UP} from '../../apollo/requests';
-import {AuthContext} from '../../context/AuthContext';
 import {RegData} from '../../@types/types';
 import {KeyboardShift} from '../../components/KeyboardShift';
+import {useForm} from 'react-hook-form';
+import {errorType} from '../login/components/LoginForm';
 
 const RegisterScreen = ({navigation}: {navigation: any}) => {
-  // @ts-ignore
-  const {register} = useContext(AuthContext);
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState<null | string>(null);
+  const {control, handleSubmit, setError, watch} = useForm();
 
   const [signUp] = useMutation(SING_UP, {
     onCompleted(data: RegData) {
+      console.log('onComplete');
       if (data.userSignUp.problem) {
-        setError(data.userSignUp.problem.message);
+        setError('email', {
+          type: 'custom',
+          message: data.userSignUp.problem.message,
+        });
       } else {
+        navigation.navigate('SuccessReg', {data: data});
       }
-      register(data);
     },
-    onError(error) {
-      console.log('error:', error.stack);
+    onError(apolloError) {
+      // @ts-ignore
+      const errorsArr: errorType[] =
+        apolloError.graphQLErrors[0].extensions.errors;
+      console.log(errorsArr);
+      errorsArr.forEach(field => {
+        field.errors.forEach(error => {
+          setError(field.field, {type: 'custom', message: error});
+        });
+      });
     },
   });
 
-  const variables = {
-    input: {
-      email,
-      password,
-      passwordConfirm: confirmPassword,
-    },
-  };
-  const createUser = () => {
+  const createUser = (data: any) => {
+    const variables = {
+      input: {
+        email: data.email,
+        password: data.password,
+        passwordConfirm: data.confirmPassword,
+      },
+    };
+
     signUp({
       variables: variables,
     });
@@ -47,16 +55,8 @@ const RegisterScreen = ({navigation}: {navigation: any}) => {
     <SafeAreaView style={{flex: 1}}>
       <KeyboardShift>
         <View style={styles.container}>
-          <RegisterForm
-            email={email}
-            password={password}
-            confirmPassword={confirmPassword}
-            setEmail={setEmail}
-            setPassword={setPassword}
-            setConfirmPassword={setConfirmPassword}
-          />
-          <Footer navigation={navigation} onPress={createUser} />
-          {/* <SuccessReg /> */}
+          <RegisterForm control={control} watch={watch} />
+          <Footer navigation={navigation} onPress={handleSubmit(createUser)} />
         </View>
       </KeyboardShift>
     </SafeAreaView>
