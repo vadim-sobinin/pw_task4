@@ -2,6 +2,7 @@ import {StyleSheet, Text} from 'react-native';
 import React from 'react';
 import {Controller, RegisterOptions} from 'react-hook-form';
 import {Input} from '@rneui/themed';
+import {IconNode} from '@rneui/base';
 
 type inputProps = {
   control: any;
@@ -14,6 +15,7 @@ type inputProps = {
     'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
   >;
   label: string;
+  rightIcon?: IconNode;
 };
 
 const CustomInput = ({
@@ -24,6 +26,7 @@ const CustomInput = ({
   secureTextEntry = false,
   multiline = false,
   label,
+  rightIcon,
 }: inputProps) => {
   return (
     <Controller
@@ -55,11 +58,10 @@ const CustomInput = ({
               marginLeft: -10,
             }}
             secureTextEntry={secureTextEntry}
+            rightIcon={rightIcon}
           />
 
-          {error && (
-            <Text style={{color: '#C2534C'}}>{error.message || 'Error'}</Text>
-          )}
+          {error && <Text style={styles.text}>{error.message || 'Error'}</Text>}
         </>
       )}
     />
@@ -69,20 +71,10 @@ const CustomInput = ({
 export default CustomInput;
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
+  text: {
+    color: '#C2534C',
+
+    marginTop: -20,
+    marginBottom: 15,
   },
-  label: {
-    color: '#9B9B9B',
-    fontSize: 14,
-    marginLeft: -10,
-  },
-  // input: {
-  //   color: '#131313',
-  //   fontSize: 16,
-  //   paddingBottom: 16,
-  //   paddingTop: 12,
-  //   borderBottomWidth: 1.5,
-  //   borderStyle: 'solid',
-  // },
 });

@@ -1,45 +1,66 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useState} from 'react';
-import {Icon, Input} from '@rneui/themed';
+import {Icon} from '@rneui/themed';
 import {AuthContext} from '../../../context/AuthContext';
 import Footer from './Footer';
 import {useMutation} from '@apollo/client';
 import {SING_IN} from '../../../apollo/requests';
 import {LoginData} from '../../../@types/types';
+import {useForm} from 'react-hook-form';
+import CustomInput from '../../../ui/CustomInput';
+
+type errorType = {
+  errors: string[];
+  field: string;
+};
 
 const LoginForm = ({navigation}: {navigation: any}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const [emailInputColor, setEmailInputColor] = useState('#9B9B9B');
-  const [passwordInputColor, setPasswordInputColor] = useState('#9B9B9B');
+  const {
+    control,
+    handleSubmit,
+    setError,
+    // formState: {errors},
+  } = useForm();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const [error, setError] = useState(null);
   // @ts-ignore
   const {login}: {login: (data: LoginData) => void} = useContext(AuthContext);
 
   const [loginReq] = useMutation(SING_IN, {
     onCompleted(data: LoginData) {
       if (data.userSignIn.problem) {
-        setError(data.userSignIn.problem.message);
+        setError('email', {
+          type: 'custom',
+          message: data.userSignIn.problem.message,
+        });
+        setError('password', {
+          type: 'invalid',
+          message: data.userSignIn.problem.message,
+        });
       } else {
+        login(data);
       }
-      login(data);
     },
-    onError(error) {
-      console.log('error:', error.stack);
+    onError(apolloError) {
+      // @ts-ignore
+      const errorsArr: errorType[] =
+        apolloError.graphQLErrors[0].extensions.errors;
+      errorsArr.forEach(field => {
+        field.errors.forEach(error => {
+          setError(field.field, {type: 'custom', message: error});
+        });
+      });
     },
   });
 
-  const variables = {
-    input: {
-      email,
-      password,
-    },
-  };
-  const authUser = () => {
+  const authUser = (data: any) => {
+    const variables = {
+      input: {
+        email: data.email,
+        password: data.password,
+      },
+    };
     loginReq({
       variables: variables,
     });
@@ -55,31 +76,21 @@ const LoginForm = ({navigation}: {navigation: any}) => {
           </Text>
         </View>
         <View style={styles.formBlock}>
-          <Input
-            placeholder={'Enter your email'}
-            placeholderTextColor={'#9B9B9B'}
-            errorStyle={{color: '#C2534C', fontSize: 14, lineHeight: 20}}
-            errorMessage="Enter correct e-mail"
-            inputStyle={{color: '#131313', fontSize: 16}}
-            inputContainerStyle={{borderColor: emailInputColor}}
-            onFocus={() => setEmailInputColor('#131313')}
-            onBlur={() => setEmailInputColor('#9B9B9B')}
-            onChangeText={setEmail}
-            value={email}
-            label={'E-mail'}
-            labelStyle={styles.label}
+          <CustomInput
+            control={control}
+            placeholder="Enter your email"
+            name="email"
+            label="E-mail"
+            rules={{required: {value: true, message: 'E-mail is required!'}}}
           />
 
-          <Input
-            placeholder={'Enter your password'}
-            placeholderTextColor={'#9B9B9B'}
-            errorStyle={{color: '#C2534C', fontSize: 14, lineHeight: 20}}
-            errorMessage="Enter correct password"
-            inputStyle={{color: '#131313', fontSize: 16}}
-            inputContainerStyle={{borderColor: passwordInputColor}}
-            onFocus={() => setPasswordInputColor('#131313')}
-            onBlur={() => setPasswordInputColor('#9B9B9B')}
-            onChangeText={setPassword}
+          <CustomInput
+            control={control}
+            placeholder="Enter your password"
+            name="password"
+            label="Password"
+            rules={{required: {value: true, message: 'Password is required!'}}}
+            secureTextEntry={!passwordVisible}
             rightIcon={
               passwordVisible ? (
                 <Icon
@@ -97,10 +108,6 @@ const LoginForm = ({navigation}: {navigation: any}) => {
                 />
               )
             }
-            secureTextEntry={!passwordVisible}
-            value={password}
-            label={'Password'}
-            labelStyle={styles.label}
           />
         </View>
       </View>
@@ -108,7 +115,7 @@ const LoginForm = ({navigation}: {navigation: any}) => {
       <Footer
         navigation={navigation}
         disabled={false}
-        onPress={() => authUser()}
+        onPress={handleSubmit(authUser)}
       />
     </View>
   );
@@ -117,11 +124,6 @@ const LoginForm = ({navigation}: {navigation: any}) => {
 export default LoginForm;
 
 const styles = StyleSheet.create({
-  label: {
-    color: '#9B9B9B',
-    fontSize: 14,
-  },
-  input: {},
   mainContainer: {
     paddingTop: 100,
     display: 'flex',
