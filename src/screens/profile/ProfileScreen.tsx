@@ -146,6 +146,8 @@ const ProfileScreen = () => {
     }
     updateProfile({variables: {input: input}});
     setIsLoading(false);
+
+    navigation.goBack();
   };
 
   if (isLoading) {

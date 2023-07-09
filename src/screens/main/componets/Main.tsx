@@ -1,26 +1,28 @@
 import {
   FlatList,
-  Pressable,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
-  View,
 } from 'react-native';
 import React, {useContext, useState} from 'react';
 import Card from './Card';
 import Sort from './Sort';
-import {ApolloError, useQuery} from '@apollo/client';
+import {useQuery} from '@apollo/client';
 import {GET_POSTS} from '../../../apollo/requests';
 import Spinner from '../../../ui/Spinner';
 import {AuthContext} from '../../../context/AuthContext';
-import {NavigationProps, Post, PostsReqData, User} from '../../../@types/types';
+import {NavigationProps, PostsReqData, User} from '../../../@types/types';
 import Header from './Header';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+
+import useThemeCustom from '../../../hooks/useThemeCustom';
 
 // @ts-ignore
 const Main = () => {
+  // const {colors} = useThemeCustom();
+
+  // console.log(colors);
+
   const navigation = useNavigation<NavigationProps>();
   const [selectedIndex, setSelectedIndex] = useState(0);
   // @ts-ignore
@@ -42,6 +44,14 @@ const Main = () => {
       },
     },
   );
+
+  useFocusEffect(() => {
+    refetch({
+      input: {
+        type: selectedIndex ? 'TOP' : 'NEW',
+      },
+    });
+  });
 
   const filterCanged = (index: number) => {
     setSelectedIndex(index), refetch();
@@ -89,6 +99,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   list: {
-    marginBottom: 80,
+    marginBottom: 160,
   },
 });

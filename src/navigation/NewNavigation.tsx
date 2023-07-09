@@ -164,7 +164,7 @@ const Tabs = () => {
         />
         <Tab.Screen
           name="My posts"
-          component={CreatePostStack}
+          component={MyPostsStack}
           options={{
             tabBarLabel: 'My posts',
             tabBarAccessibilityLabel: 'My posts',
@@ -193,7 +193,7 @@ const MainStack1 = () => {
 const FavoritesStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Favorites" component={Favorites} />
+      <Stack.Screen name="FavoritesContent" component={Favorites} />
       <Stack.Screen name="FullCard" component={FullPost} />
     </Stack.Navigator>
   );

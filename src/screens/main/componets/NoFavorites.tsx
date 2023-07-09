@@ -1,13 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-// import { useFonts } from 'expo-font';
-import Spinner from '../../../ui/Spinner';
 
 const NoFavorites = ({children}: {children: any}) => {
-  // const [fontsLoaded] = useFonts({
-  //   Nokwy: require('../../../../assets/fonts/Nokwy.otf'),
-  // });
-
   return (
     <View style={styles.container}>
       <View style={styles.titleWrapper}>

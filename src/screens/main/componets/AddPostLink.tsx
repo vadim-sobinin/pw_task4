@@ -2,10 +2,9 @@ import {Pressable, StyleSheet} from 'react-native';
 import React from 'react';
 import {Icon} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
-import {NavigationProps} from '../../../@types/types';
 
 const AddPostLink = () => {
-  const navigation = useNavigation<NavigationProps>();
+  const navigation = useNavigation();
   return (
     <Pressable
       onPress={() => {

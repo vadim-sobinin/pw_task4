@@ -14,6 +14,7 @@ import {convertDate} from './Card';
 import {AuthContext} from '../../../context/AuthContext';
 import {useMutation} from '@apollo/client';
 import {GET_FAVORITES, LIKE_POST, UNLIKE_POST} from '../../../apollo/requests';
+import Share from 'react-native-share';
 
 const FullPost = ({route}: {route: {params: {data: Post}}}) => {
   const navigation = useNavigation<NavigationProps>();
@@ -95,6 +96,17 @@ const FullPost = ({route}: {route: {params: {data: Post}}}) => {
     },
   });
 
+  const onPressShare = async () => {
+    try {
+      await Share.open({
+        message: data.title,
+        url: data.mediaUrl,
+      });
+    } catch (error) {
+      console.log('Share error', error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.wrapper}>
@@ -133,6 +145,7 @@ const FullPost = ({route}: {route: {params: {data: Post}}}) => {
             />
             <Text style={styles.counterText}>{data.likesCount}</Text>
             <Icon
+              onPress={onPressShare}
               name="share-social"
               size={20}
               type="ionicon"

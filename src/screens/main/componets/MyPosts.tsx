@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import Card from './Card';
 import {useMutation, useQuery} from '@apollo/client';
 import {DELETE_POST, GET_MYPOST} from '../../../apollo/requests';
@@ -18,7 +18,7 @@ import Header from './Header';
 import AddPostLink from './AddPostLink';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {Icon} from '@rneui/themed';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 const MyPosts = () => {
   // @ts-ignore
@@ -39,6 +39,10 @@ const MyPosts = () => {
       // onCompleted(data) {},
     },
   );
+
+  useFocusEffect(() => {
+    refetch({});
+  });
 
   const [deleteReq] = useMutation(DELETE_POST, {
     context: {
@@ -77,6 +81,7 @@ const MyPosts = () => {
             <NoFavorites>You haven't posted any posts yet</NoFavorites>
           ) : (
             <SwipeListView
+              style={styles.list}
               data={data.myPosts.data}
               renderItem={({item}: {item: Post}) => (
                 <Pressable
@@ -141,7 +146,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   list: {
-    // marginBottom: 80,
+    marginBottom: 80,
   },
   text: {
     color: '#fff',

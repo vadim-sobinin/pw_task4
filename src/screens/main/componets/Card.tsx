@@ -1,15 +1,11 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {Avatar, Icon, Image} from '@rneui/themed';
-import {LikeData, Post} from '../../../@types/types';
+import {Post} from '../../../@types/types';
 import {useMutation} from '@apollo/client';
-import {
-  GET_FAVORITES,
-  GET_POSTS,
-  LIKE_POST,
-  UNLIKE_POST,
-} from '../../../apollo/requests';
+import {GET_FAVORITES, LIKE_POST, UNLIKE_POST} from '../../../apollo/requests';
 import {AuthContext} from '../../../context/AuthContext';
+import Share from 'react-native-share';
 
 export const convertDate = (date: string) => {
   let dateInProcess = date.slice(0, 10).split('-');
@@ -18,7 +14,6 @@ export const convertDate = (date: string) => {
 };
 
 const Card = ({data}: {data: Post}) => {
-  // const [cardData, setCardData] = useState(data);
   // @ts-ignore
   const {userToken} = useContext(AuthContext);
 
@@ -49,7 +44,7 @@ const Card = ({data}: {data: Post}) => {
       },
     ],
 
-    onCompleted(newData: LikeData) {},
+    onCompleted() {},
     onError(error) {
       console.log('error:', error);
     },
@@ -81,12 +76,22 @@ const Card = ({data}: {data: Post}) => {
       },
     ],
 
-    onCompleted(newData: LikeData) {},
+    onCompleted() {},
     onError(error) {
       console.log('error:', error.stack);
     },
   });
 
+  const onPressShare = async () => {
+    try {
+      await Share.open({
+        message: data.title,
+        url: data.mediaUrl,
+      });
+    } catch (error) {
+      console.log('Share error', error);
+    }
+  };
   return (
     <View style={styles.gap}>
       <View style={styles.container}>
@@ -119,6 +124,7 @@ const Card = ({data}: {data: Post}) => {
               size={20}
               type="ionicon"
               color="#000000"
+              onPress={onPressShare}
             />
           </View>
         </View>

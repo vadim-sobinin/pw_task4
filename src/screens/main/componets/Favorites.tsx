@@ -1,39 +1,43 @@
 import {
   FlatList,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
-  View,
 } from 'react-native';
-import React, { useContext, useState } from 'react';
+import React, {useContext} from 'react';
 import Card from './Card';
-import { ApolloError, useQuery } from '@apollo/client';
-import { GET_FAVORITES, GET_POSTS } from '../../../apollo/requests';
+import {useQuery} from '@apollo/client';
+import {GET_FAVORITES} from '../../../apollo/requests';
 import Spinner from '../../../ui/Spinner';
-import { AuthContext } from '../../../context/AuthContext';
-import { FavoritesData, NavigationProps, Post, PostsReqData, User } from '../../../@types/types';
+import {AuthContext} from '../../../context/AuthContext';
+import {FavoritesData, NavigationProps} from '../../../@types/types';
 import NoFavorites from './NoFavorites';
 import Header from './Header';
-import { useNavigation } from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 const Favorites = () => {
   // @ts-ignore
-  const { userToken, userInfo } = useContext(AuthContext);
+  const {userToken, userInfo} = useContext(AuthContext);
 
   const navigation = useNavigation<NavigationProps>();
-  const { loading, error, data, refetch } = useQuery<FavoritesData | undefined>(GET_FAVORITES, {
-    variables: {
-      input: {},
-    },
-    context: {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`,
+  const {loading, error, data, refetch} = useQuery<FavoritesData | undefined>(
+    GET_FAVORITES,
+    {
+      variables: {
+        input: {},
       },
+      context: {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`,
+        },
+      },
+      onCompleted() {},
     },
-    onCompleted(data) {},
+  );
+
+  useFocusEffect(() => {
+    refetch({});
   });
 
   if (loading || !data) {
@@ -47,17 +51,19 @@ const Favorites = () => {
       <SafeAreaView style={styles.container}>
         <Header avatarUrl={userInfo.avatarUrl}>Favorites</Header>
         {data?.favouritePosts.data.length === 0 ? (
-          <NoFavorites>You haven't added anything to your favorites yet</NoFavorites>
+          <NoFavorites>
+            You haven't added anything to your favorites yet
+          </NoFavorites>
         ) : (
           <FlatList
             style={styles.list}
             data={data.favouritePosts.data}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
+            keyExtractor={item => item.id}
+            renderItem={({item}) => (
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => {
-                  navigation.navigate('FullCard', { data: item });
+                  navigation.navigate('FullCard', {data: item});
                 }}>
                 <Card data={item} />
               </TouchableOpacity>
@@ -74,6 +80,7 @@ export default Favorites;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
+    flex: 1,
   },
   list: {
     // marginBottom: 80,

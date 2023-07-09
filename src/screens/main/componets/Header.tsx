@@ -1,16 +1,18 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
-import React, { useContext } from 'react';
-import { AuthContext } from '../../../context/AuthContext';
-import { Avatar } from '@rneui/themed';
-import { useNavigation } from '@react-navigation/native';
-import { NavigationProps } from '../../../@types/types';
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {Avatar} from '@rneui/themed';
+import {useNavigation} from '@react-navigation/native';
 
 const noAvatarUrl =
   'https://w7.pngwing.com/pngs/686/219/png-transparent-youtube-user-computer-icons-information-youtube-hand-silhouette-avatar.png';
 
-const Header = ({ children, avatarUrl }: { children: any; avatarUrl: string | null }) => {
-  // @ts-ignore
-  const { logout } = useContext(AuthContext);
+const Header = ({
+  children,
+  avatarUrl,
+}: {
+  children: any;
+  avatarUrl: string | null;
+}) => {
   const navigation = useNavigation();
 
   return (
@@ -21,7 +23,7 @@ const Header = ({ children, avatarUrl }: { children: any; avatarUrl: string | nu
           navigation.openDrawer();
         }}
         rounded
-        source={{ uri: avatarUrl ? avatarUrl : noAvatarUrl }}
+        source={{uri: avatarUrl ? avatarUrl : noAvatarUrl}}
         size={40}
       />
     </View>

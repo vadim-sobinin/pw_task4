@@ -1,6 +1,6 @@
-import { StyleSheet, View, Text } from 'react-native';
-import React, { useState } from 'react';
-import { ButtonGroup } from '@rneui/themed';
+import {StyleSheet} from 'react-native';
+import React from 'react';
+import {ButtonGroup} from '@rneui/themed';
 
 const Sort = ({
   selectedIndex,
@@ -13,7 +13,7 @@ const Sort = ({
     <ButtonGroup
       buttons={['New', 'Top']}
       selectedIndex={selectedIndex}
-      onPress={(value) => {
+      onPress={value => {
         setSelectedIndex(value);
       }}
       containerStyle={styles.container}
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     color: '#131313',
     fontSize: 18,
   },
-  button: { backgroundColor: '#F4F5F4' },
+  button: {backgroundColor: '#F4F5F4'},
   container: {
     marginTop: 20,
     marginBottom: 20,
