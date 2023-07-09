@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useContext} from 'react';
-import {Avatar, Icon, Image} from '@rneui/themed';
+import {Avatar, Colors, Icon, Image, useTheme} from '@rneui/themed';
 import {Post} from '../../../@types/types';
 import {useMutation} from '@apollo/client';
 import {GET_FAVORITES, LIKE_POST, UNLIKE_POST} from '../../../apollo/requests';
@@ -14,6 +14,11 @@ export const convertDate = (date: string) => {
 };
 
 const Card = ({data}: {data: Post}) => {
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
+
   // @ts-ignore
   const {userToken} = useContext(AuthContext);
 
@@ -116,14 +121,14 @@ const Card = ({data}: {data: Post}) => {
               onPress={() => (data.isLiked ? unLikePost() : likePost())}
               size={20}
               type="ionicon"
-              color="#000000"
+              color={colors.black}
             />
             <Text style={styles.counterText}>{data.likesCount}</Text>
             <Icon
               name="share-social"
               size={20}
               type="ionicon"
-              color="#000000"
+              color={colors.black}
               onPress={onPressShare}
             />
           </View>
@@ -135,64 +140,65 @@ const Card = ({data}: {data: Post}) => {
 
 export default Card;
 
-const styles = StyleSheet.create({
-  gap: {paddingBottom: 4},
-  container: {
-    backgroundColor: '#F4F5F4',
-    paddingTop: 24,
-    paddingRight: 20,
-    paddingBottom: 32,
-    paddingLeft: 20,
-  },
-  header: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  title: {
-    color: '#131313',
-    fontWeight: '500',
-    fontSize: 16,
-  },
-  date: {
-    color: '#9B9B9B',
-    fontSize: 14,
-  },
-  image: {
-    width: '100%',
-    height: 225,
-    borderRadius: 17,
-    marginBottom: 20,
-  },
-  footer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  author: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  reactions: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  body: {},
-  avatar: {},
-  name: {
-    color: '#9B9B9B',
-    fontSize: 14,
-  },
-  counterText: {
-    fontSize: 14,
-    color: '#131313',
-    marginLeft: 6,
-    marginRight: 14,
-  },
-});
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    gap: {paddingBottom: 4},
+    container: {
+      backgroundColor: colors.grey0,
+      paddingTop: 24,
+      paddingRight: 20,
+      paddingBottom: 32,
+      paddingLeft: 20,
+    },
+    header: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 12,
+    },
+    title: {
+      color: colors.black,
+      fontWeight: '500',
+      fontSize: 16,
+    },
+    date: {
+      color: colors.grey3,
+      fontSize: 14,
+    },
+    image: {
+      width: '100%',
+      height: 225,
+      borderRadius: 17,
+      marginBottom: 20,
+    },
+    footer: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    author: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+    reactions: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    body: {},
+    avatar: {},
+    name: {
+      color: colors.grey3,
+      fontSize: 14,
+    },
+    counterText: {
+      fontSize: 14,
+      color: colors.black,
+      marginLeft: 6,
+      marginRight: 14,
+    },
+  });

@@ -17,7 +17,7 @@ import NoFavorites from './NoFavorites';
 import Header from './Header';
 import AddPostLink from './AddPostLink';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import {Icon} from '@rneui/themed';
+import {Colors, Icon, useTheme} from '@rneui/themed';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 const MyPosts = () => {
@@ -39,6 +39,11 @@ const MyPosts = () => {
       // onCompleted(data) {},
     },
   );
+
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
 
   useFocusEffect(() => {
     refetch({});
@@ -116,6 +121,10 @@ const RenderHiddenItem = ({
   deletePost: (id: string) => void;
   data: Post;
 }) => {
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -123,54 +132,55 @@ const RenderHiddenItem = ({
       onPress={() => deletePost(data.id)}>
       <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
         <Icon name="trash" type="ionicon" color="#fff" size={32} />
-        <Text style={styles.text}>Delete</Text>
+        <Text style={{color: '#fff'}}>Delete</Text>
       </View>
     </TouchableOpacity>
   );
 };
 
-const styles = StyleSheet.create({
-  body: {
-    width: 56,
-    height: 56,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 50,
-    position: 'absolute',
-    bottom: 32,
-    right: 16,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  list: {
-    marginBottom: 80,
-  },
-  text: {
-    color: '#fff',
-    marginTop: 8,
-  },
-  rowBack: {
-    alignItems: 'center',
-    backgroundColor: '#C2534C',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingLeft: 15,
-    marginBottom: 4,
-  },
-  backRightBtn: {
-    alignItems: 'center',
-    bottom: 0,
-    justifyContent: 'center',
-    position: 'absolute',
-    top: 0,
-    width: 75,
-  },
-  backRightBtnRight: {
-    backgroundColor: '#C2534C',
-    right: 0,
-  },
-});
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    body: {
+      width: 56,
+      height: 56,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 50,
+      position: 'absolute',
+      bottom: 32,
+      right: 16,
+    },
+    container: {
+      flex: 1,
+      backgroundColor: colors.white,
+    },
+    list: {
+      marginBottom: 80,
+    },
+    text: {
+      color: colors.white,
+      marginTop: 8,
+    },
+    rowBack: {
+      alignItems: 'center',
+      backgroundColor: colors.error,
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingLeft: 15,
+      marginBottom: 4,
+    },
+    backRightBtn: {
+      alignItems: 'center',
+      bottom: 0,
+      justifyContent: 'center',
+      position: 'absolute',
+      top: 0,
+      width: 75,
+    },
+    backRightBtnRight: {
+      backgroundColor: colors.error,
+      right: 0,
+    },
+  });

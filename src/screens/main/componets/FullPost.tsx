@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {useContext} from 'react';
 import {NavigationProps, Post} from '../../../@types/types';
-import {Avatar, Icon} from '@rneui/themed';
+import {Avatar, Colors, Icon, useTheme} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
 import {convertDate} from './Card';
 import {AuthContext} from '../../../context/AuthContext';
@@ -19,6 +19,11 @@ import Share from 'react-native-share';
 const FullPost = ({route}: {route: {params: {data: Post}}}) => {
   const navigation = useNavigation<NavigationProps>();
   const data = route.params.data;
+
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
 
   // @ts-ignore
   const {userToken} = useContext(AuthContext);
@@ -116,7 +121,7 @@ const FullPost = ({route}: {route: {params: {data: Post}}}) => {
             <Icon
               name="arrow-back"
               type="ionicon"
-              color="#131313"
+              color={colors.black}
               size={24}
               onPress={() => {
                 navigation.goBack();
@@ -141,7 +146,7 @@ const FullPost = ({route}: {route: {params: {data: Post}}}) => {
               onPress={() => (data.isLiked ? unLikePost() : likePost())}
               size={20}
               type="ionicon"
-              color="#000000"
+              color={colors.black}
             />
             <Text style={styles.counterText}>{data.likesCount}</Text>
             <Icon
@@ -149,7 +154,7 @@ const FullPost = ({route}: {route: {params: {data: Post}}}) => {
               name="share-social"
               size={20}
               type="ionicon"
-              color="#000000"
+              color={colors.black}
             />
           </View>
         </View>
@@ -160,81 +165,82 @@ const FullPost = ({route}: {route: {params: {data: Post}}}) => {
 
 export default FullPost;
 
-const styles = StyleSheet.create({
-  footer: {
-    marginTop: 20,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  author: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  reactions: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  name: {
-    color: '#9B9B9B',
-    fontSize: 14,
-  },
-  counterText: {
-    fontSize: 14,
-    color: '#131313',
-    marginLeft: 6,
-    marginRight: 14,
-  },
-  description: {
-    fontSize: 14,
-    lineHeight: 19.3,
-    color: '#131313',
-  },
-  image: {
-    width: '100%',
-    height: 226,
-    borderRadius: 17,
-    marginBottom: 20,
-  },
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    footer: {
+      marginTop: 20,
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    author: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+    reactions: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    name: {
+      color: colors.grey3,
+      fontSize: 14,
+    },
+    counterText: {
+      fontSize: 14,
+      color: colors.black,
+      marginLeft: 6,
+      marginRight: 14,
+    },
+    description: {
+      fontSize: 14,
+      lineHeight: 19.3,
+      color: colors.black,
+    },
+    image: {
+      width: '100%',
+      height: 226,
+      borderRadius: 17,
+      marginBottom: 20,
+    },
 
-  date: {
-    textAlign: 'center',
-    marginTop: 8,
-    marginBottom: 8,
-    color: '#9B9B9B',
-    fontSize: 14,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  wrapper: {
-    display: 'flex',
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  header: {
-    position: 'relative',
-  },
-  headerText: {
-    paddingBottom: 20,
-    paddingTop: 20,
-    paddingLeft: 40,
-    paddingRight: 40,
-    color: '#131313',
-    fontSize: 18,
-    fontWeight: '600',
-    alignSelf: 'center',
-  },
-  icon: {
-    position: 'absolute',
-    top: 20,
-    left: 0,
-    height: 24,
-    width: 24,
-  },
-});
+    date: {
+      textAlign: 'center',
+      marginTop: 8,
+      marginBottom: 8,
+      color: colors.grey3,
+      fontSize: 14,
+    },
+    container: {
+      flex: 1,
+      backgroundColor: colors.white,
+    },
+    wrapper: {
+      display: 'flex',
+      paddingLeft: 20,
+      paddingRight: 20,
+    },
+    header: {
+      position: 'relative',
+    },
+    headerText: {
+      paddingBottom: 20,
+      paddingTop: 20,
+      paddingLeft: 40,
+      paddingRight: 40,
+      color: colors.black,
+      fontSize: 18,
+      fontWeight: '600',
+      alignSelf: 'center',
+    },
+    icon: {
+      position: 'absolute',
+      top: 20,
+      left: 0,
+      height: 24,
+      width: 24,
+    },
+  });

@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import CustomRadioButton from '../../../ui/CustomRadioButton';
+import {Colors, useTheme} from '@rneui/themed';
 
 const GenderBlock = ({
   selectedIndex,
@@ -9,6 +10,11 @@ const GenderBlock = ({
   selectedIndex: string | null;
   setSelectedIndex: (id: string) => void;
 }) => {
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
+
   const onPressRadioButton = (id: string) => {
     setSelectedIndex(id);
   };
@@ -33,15 +39,16 @@ const GenderBlock = ({
 
 export default GenderBlock;
 
-const styles = StyleSheet.create({
-  infoBlockTitle: {
-    color: '#131313',
-    fontSize: 18,
-    fontWeight: '500',
-    marginBottom: 16,
-  },
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    infoBlockTitle: {
+      color: colors.black,
+      fontSize: 18,
+      fontWeight: '500',
+      marginBottom: 16,
+    },
 
-  formBlock: {
-    marginTop: 32,
-  },
-});
+    formBlock: {
+      marginTop: 32,
+    },
+  });

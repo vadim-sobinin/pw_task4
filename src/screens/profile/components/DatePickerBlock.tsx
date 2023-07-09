@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {Input} from '@rneui/themed';
+import {Colors, Input, useTheme} from '@rneui/themed';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 type Props = {
@@ -24,6 +24,11 @@ const DatePickerBlock = ({
   setDate,
   setDateOfBirth,
 }: Props) => {
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
+
   const [showPicker, setShowPicker] = useState(false);
   const toggleDatepicker = () => {
     setShowPicker(!showPicker);
@@ -69,21 +74,21 @@ const DatePickerBlock = ({
       <Pressable onPress={toggleDatepicker}>
         <Input
           placeholder={'Select date of birth'}
-          placeholderTextColor={'#9B9B9B'}
+          placeholderTextColor={colors.grey3}
           inputStyle={{
-            color: '#131313',
+            color: colors.grey3,
             fontSize: 16,
           }}
           inputContainerStyle={{
             borderBottomWidth: 1.5,
-            borderColor: '#9B9B9B',
+            borderColor: colors.grey3,
             marginLeft: -10,
             marginRight: -10,
           }}
           onChangeText={setDateOfBirth}
           value={dateOfBirth}
           label={'B-day'}
-          labelStyle={{color: '#9B9B9B', fontSize: 14, marginLeft: -10}}
+          labelStyle={{color: colors.grey3, fontSize: 14, marginLeft: -10}}
           editable={false}
           onPressIn={toggleDatepicker}
         />
@@ -91,9 +96,9 @@ const DatePickerBlock = ({
 
       <Modal
         style={{
-          backgroundColor: 'red',
           alignItems: 'center',
           justifyContent: 'center',
+          backgroundColor: colors.white,
         }}
         animationType="fade"
         transparent={true}
@@ -116,6 +121,7 @@ const DatePickerBlock = ({
               onChange={onChange}
               style={styles.datePicker}
               maximumDate={new Date()}
+              textColor={colors.black}
             />
           </View>
           {Platform.OS === 'ios' && (
@@ -131,7 +137,7 @@ const DatePickerBlock = ({
                     {borderBottomWidth: 0.25},
                   ]}
                   onPress={confirmIOSDate}>
-                  <Text style={[styles.buttonText, {color: '#87B71F'}]}>
+                  <Text style={[styles.buttonText, {color: colors.success}]}>
                     Confirm
                   </Text>
                 </TouchableOpacity>
@@ -143,7 +149,7 @@ const DatePickerBlock = ({
                     {borderTopWidth: 0.25},
                   ]}
                   onPress={toggleDatepicker}>
-                  <Text style={[styles.buttonText, {color: '#C2534C'}]}>
+                  <Text style={[styles.buttonText, {color: colors.error}]}>
                     Cancel
                   </Text>
                 </TouchableOpacity>
@@ -158,71 +164,72 @@ const DatePickerBlock = ({
 
 export default DatePickerBlock;
 
-const styles = StyleSheet.create({
-  infoBlockTitle: {
-    color: '#131313',
-    fontSize: 18,
-    fontWeight: '500',
-    marginBottom: 16,
-  },
-  buttonsView: {
-    backgroundColor: '#fff',
-    flexDirection: 'column',
-    width: '100%',
-    borderRadius: 15,
-  },
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center',
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    infoBlockTitle: {
+      color: colors.black,
+      fontSize: 18,
+      fontWeight: '500',
+      marginBottom: 16,
+    },
+    buttonsView: {
+      backgroundColor: colors.white,
+      flexDirection: 'column',
+      width: '100%',
+      borderRadius: 15,
+    },
+    button: {
+      justifyContent: 'center',
+      alignItems: 'center',
 
-    backgroundColor: '#blue',
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    paddingVertical: 12,
-  },
-  datePicker: {
-    height: 188,
-    marginTop: -10,
-  },
+      backgroundColor: '#blue',
+    },
+    buttonText: {
+      fontSize: 16,
+      fontWeight: '500',
+      paddingVertical: 12,
+    },
+    datePicker: {
+      height: 188,
+      marginTop: -10,
+    },
 
-  formBlock: {
-    marginTop: 32,
-  },
-  pickerButton: {
-    borderStyle: 'solid',
-    borderColor: '#DEDEDE',
-  },
-  datapickerText: {
-    color: '#9A99A2',
-    paddingBottom: 18,
-    paddingTop: 16,
-    textAlign: 'center',
-  },
-  datapickerTextBlock: {
-    width: '100%',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E6E4EA',
-    borderStyle: 'solid',
-    marginBottom: 18,
-  },
-  centeredView: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#3030309e',
-    gap: 8,
-    paddingLeft: 16,
-    paddingRight: 16,
-  },
-  modalView: {
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 20,
-    padding: 35,
-    width: '100%',
-  },
-});
+    formBlock: {
+      marginTop: 32,
+    },
+    pickerButton: {
+      borderStyle: 'solid',
+      borderColor: colors.grey1,
+    },
+    datapickerText: {
+      color: '#9A99A2',
+      paddingBottom: 18,
+      paddingTop: 16,
+      textAlign: 'center',
+    },
+    datapickerTextBlock: {
+      width: '100%',
+      borderBottomWidth: 1,
+      borderBottomColor: colors.grey1,
+      borderStyle: 'solid',
+      marginBottom: 18,
+    },
+    centeredView: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.grey1,
+      gap: 8,
+      paddingLeft: 16,
+      paddingRight: 16,
+    },
+    modalView: {
+      backgroundColor: colors.white,
+      paddingVertical: 12,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 20,
+      padding: 35,
+      width: '100%',
+    },
+  });

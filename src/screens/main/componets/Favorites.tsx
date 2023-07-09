@@ -14,10 +14,16 @@ import {FavoritesData, NavigationProps} from '../../../@types/types';
 import NoFavorites from './NoFavorites';
 import Header from './Header';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {Colors, useTheme} from '@rneui/themed';
 
 const Favorites = () => {
   // @ts-ignore
   const {userToken, userInfo} = useContext(AuthContext);
+
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
 
   const navigation = useNavigation<NavigationProps>();
   const {loading, error, data, refetch} = useQuery<FavoritesData | undefined>(
@@ -77,12 +83,13 @@ const Favorites = () => {
 
 export default Favorites;
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    flex: 1,
-  },
-  list: {
-    // marginBottom: 80,
-  },
-});
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: colors.white,
+      flex: 1,
+    },
+    list: {
+      // marginBottom: 80,
+    },
+  });

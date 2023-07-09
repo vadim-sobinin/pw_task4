@@ -10,13 +10,13 @@ const DarkTheme = {
       150: '#1b1b1b',
       100: '#131313',
     },
-    // primary: {
-    //   default: '#91C521',
-    //   pressed: '#7AA818',
-    // },
-    // additional: {
-    //   error: '#C2534C',
-    // },
+    primary: {
+      default: '#91C521',
+      pressed: '#7AA818',
+    },
+    additional: {
+      error: '#C2534C',
+    },
   },
 };
 

@@ -1,7 +1,7 @@
 import {StyleSheet, Text} from 'react-native';
 import React from 'react';
 import {Controller, RegisterOptions} from 'react-hook-form';
-import {Input} from '@rneui/themed';
+import {Input, useTheme} from '@rneui/themed';
 import {IconNode} from '@rneui/base';
 
 type inputProps = {
@@ -28,6 +28,9 @@ const CustomInput = ({
   label,
   rightIcon,
 }: inputProps) => {
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
   return (
     <Controller
       control={control}
@@ -37,15 +40,19 @@ const CustomInput = ({
         <>
           <Input
             placeholder={placeholder}
-            placeholderTextColor={error ? '#C2534C' : '#9B9B9B'}
+            placeholderTextColor={error ? colors.error : colors.grey3}
             multiline={multiline}
             inputStyle={{
-              color: error ? '#C2534C' : '#131313',
+              color: error ? colors.error : colors.black,
               fontSize: 16,
             }}
             inputContainerStyle={{
               borderBottomWidth: 1.5,
-              borderColor: error ? '#C2534C' : value ? '#131313' : '#9B9B9B',
+              borderColor: error
+                ? colors.error
+                : value
+                ? colors.black
+                : colors.grey3,
               marginLeft: -10,
               marginRight: -10,
             }}
@@ -53,7 +60,7 @@ const CustomInput = ({
             value={value}
             label={label}
             labelStyle={{
-              color: error ? '#C2534C' : '#9B9B9B',
+              color: error ? colors.error : colors.grey3,
               fontSize: 14,
               marginLeft: -10,
             }}

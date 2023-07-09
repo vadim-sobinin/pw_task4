@@ -3,8 +3,14 @@ import React from 'react';
 import CustomInput from '../../../ui/CustomInput';
 import {Control} from 'react-hook-form';
 import {formInputsType} from '../ProfileScreen';
+import {Colors, useTheme} from '@rneui/themed';
 
 const PersonalInfoBlock = ({control}: {control: Control<formInputsType>}) => {
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
+
   return (
     <View style={styles.formBlock}>
       <Text style={styles.infoBlockTitle}>Personal Info</Text>
@@ -35,15 +41,16 @@ const PersonalInfoBlock = ({control}: {control: Control<formInputsType>}) => {
 
 export default PersonalInfoBlock;
 
-const styles = StyleSheet.create({
-  infoBlockTitle: {
-    color: '#131313',
-    fontSize: 18,
-    fontWeight: '500',
-    marginBottom: 16,
-  },
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    infoBlockTitle: {
+      color: colors.black,
+      fontSize: 18,
+      fontWeight: '500',
+      marginBottom: 16,
+    },
 
-  formBlock: {
-    marginTop: 32,
-  },
-});
+    formBlock: {
+      marginTop: 32,
+    },
+  });

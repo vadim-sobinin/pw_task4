@@ -8,7 +8,7 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React, {useContext} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Main from '../screens/main/componets/Main';
-import {Avatar, Icon} from '@rneui/themed';
+import {Avatar, Colors, Icon, useTheme} from '@rneui/themed';
 import Favorites from '../screens/main/componets/Favorites';
 import MyPosts from '../screens/main/componets/MyPosts';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -21,11 +21,13 @@ import {User} from '../@types/types';
 const Drawer = createDrawerNavigator();
 
 export function MyDrawer() {
+  const {theme} = useTheme();
+  const colors = theme.colors;
   return (
     <Drawer.Navigator
       screenOptions={{
         headerShown: false,
-        drawerLabelStyle: {color: '#131313', marginLeft: -24},
+        drawerLabelStyle: {color: colors.black, marginLeft: -24},
         swipeEnabled: false,
       }}
       drawerContent={props => <CustomDrawerContent {...props} />}>
@@ -43,7 +45,12 @@ export function MyDrawer() {
           drawerItemStyle: {marginLeft: 32},
           drawerIcon: () => {
             return (
-              <Icon name="person" type="ionicon" color="#131313" size={24} />
+              <Icon
+                name="person"
+                type="ionicon"
+                color={colors.black}
+                size={24}
+              />
             );
           },
         }}
@@ -53,36 +60,49 @@ export function MyDrawer() {
 }
 
 function CustomDrawerContent(props) {
-  const styles = StyleSheet.create({
-    scrollView: {
-      flex: 1,
-      backgroundColor: 'blue',
-    },
-    container: {},
-    theme: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 8,
-      marginBottom: 40,
-      marginTop: 380,
-      marginLeft: 32,
-    },
-    avatarBlock: {
-      marginTop: 60,
-      marginBottom: 60,
-      marginLeft: 32,
-    },
-    username: {
-      fontSize: 20,
-      fontWeight: '600',
-      marginTop: 12,
-    },
-  });
+  const makeStyles = (colors: Colors) =>
+    StyleSheet.create({
+      scrollView: {
+        flex: 1,
+      },
+      container: {
+        backgroundColor: colors.white,
+      },
+      theme: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        marginBottom: 40,
+        marginTop: 200,
+        marginLeft: 32,
+      },
+      avatarBlock: {
+        marginTop: 60,
+        marginBottom: 60,
+        marginLeft: 32,
+      },
+      username: {
+        fontSize: 20,
+        fontWeight: '600',
+        marginTop: 12,
+        color: colors.black,
+      },
+    });
   // @ts-ignore
   const {logout, userInfo}: {userInfo: User} = useContext(AuthContext);
   const noAvatarUrl =
     'https://w7.pngwing.com/pngs/686/219/png-transparent-youtube-user-computer-icons-information-youtube-hand-silhouette-avatar.png';
+
+  const {updateTheme, theme} = useTheme();
+  const colors = theme.colors;
+  const toggleTheme = () => {
+    updateTheme(theme => ({
+      mode: theme.mode === 'light' ? 'dark' : 'light',
+    }));
+  };
+  const styles = makeStyles(colors);
+
   return (
     <DrawerContentScrollView {...props} style={styles.container}>
       <View style={styles.avatarBlock}>
@@ -108,19 +128,25 @@ function CustomDrawerContent(props) {
                 <Icon
                   name="exit-outline"
                   type="ionicon"
-                  color="#131313"
+                  color={colors.black}
                   size={24}
                 />
               );
             }}
-            labelStyle={{color: '#131313', marginLeft: -24}}
+            labelStyle={{color: colors.black, marginLeft: -24}}
             style={{marginLeft: 32}}
           />
         </View>
       </View>
-      <Pressable style={styles.theme}>
-        <Icon name="sunny" type="ionicon" color="#131313" />
-        <Text>Light theme</Text>
+      <Pressable style={styles.theme} onPress={toggleTheme}>
+        <Icon
+          name={theme.mode === 'light' ? 'sunny' : 'moon'}
+          type="ionicon"
+          color={colors.black}
+        />
+        <Text style={{color: colors.black}}>
+          {theme.mode === 'light' ? 'Light theme' : 'Dark theme'}
+        </Text>
       </Pressable>
     </DrawerContentScrollView>
   );
@@ -130,14 +156,34 @@ function CustomDrawerContent(props) {
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
+  const makeStyles = (colors: Colors) =>
+    StyleSheet.create({
+      container: {
+        paddingTop: 12,
+        minHeight: 55,
+        backgroundColor: colors.white,
+        borderTopWidth: 0.5,
+        borderStyle: 'solid',
+        borderTopColor: colors.white,
+      },
+      tab: {
+        fontSize: 12,
+      },
+    });
+
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
+
   return (
     <Tab.Navigator>
       <Tab.Group
         screenOptions={{
           headerShown: false,
           tabBarLabelStyle: styles.tab,
-          tabBarActiveTintColor: '#87B71F',
-          tabBarInactiveTintColor: '#DEDEDE',
+          tabBarActiveTintColor: colors.primary,
+          tabBarInactiveTintColor: colors.grey1,
           tabBarStyle: styles.container,
         }}>
         <Tab.Screen
@@ -216,13 +262,3 @@ const CreatePostStack = () => {
     </Stack.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 12,
-    minHeight: 55,
-  },
-  tab: {
-    fontSize: 12,
-  },
-});

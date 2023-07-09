@@ -1,6 +1,6 @@
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useContext, useState} from 'react';
-import {Avatar, Icon} from '@rneui/themed';
+import {Avatar, Colors, Icon, useTheme} from '@rneui/themed';
 import useGetPicture from '../../../components/useGetPicture';
 import {Image} from 'react-native-image-crop-picker';
 import {User} from '../../../@types/types';
@@ -28,6 +28,11 @@ type AvatarProps = {
 };
 const AvatarBlock = ({image, setImage, updateProfile}: AvatarProps) => {
   const [showPhotoModal, setShowPhotoModal] = useState(false);
+
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
 
   // @ts-ignore
   const {userInfo}: {userInfo: User} = useContext(AuthContext);
@@ -64,7 +69,7 @@ const AvatarBlock = ({image, setImage, updateProfile}: AvatarProps) => {
           size={160}
         />
         <View style={styles.avatarIconWrapper}>
-          <Icon name={'camera'} size={22} type="ionicon" color="#fff" />
+          <Icon name={'camera'} size={22} type="ionicon" color={colors.white} />
         </View>
       </TouchableOpacity>
       <Modal
@@ -87,7 +92,7 @@ const AvatarBlock = ({image, setImage, updateProfile}: AvatarProps) => {
                 {borderBottomWidth: 0.25},
               ]}
               onPress={takePhotoFromCamera}>
-              <Text style={[styles.buttonText, {color: '#87B71F'}]}>
+              <Text style={[styles.buttonText, {color: colors.success}]}>
                 Take a photo
               </Text>
             </TouchableOpacity>
@@ -99,7 +104,7 @@ const AvatarBlock = ({image, setImage, updateProfile}: AvatarProps) => {
                 {borderTopWidth: 0.25, borderBottomWidth: 0.25},
               ]}
               onPress={choosePhotoFromLibrary}>
-              <Text style={[styles.buttonText, {color: '#87B71F'}]}>
+              <Text style={[styles.buttonText, {color: colors.success}]}>
                 Choose from the library
               </Text>
             </TouchableOpacity>
@@ -115,7 +120,7 @@ const AvatarBlock = ({image, setImage, updateProfile}: AvatarProps) => {
                 setImage(null);
                 setShowPhotoModal(false);
               }}>
-              <Text style={[styles.buttonText, {color: '#C2534C'}]}>
+              <Text style={[styles.buttonText, {color: colors.error}]}>
                 Delete photo
               </Text>
             </TouchableOpacity>
@@ -125,7 +130,7 @@ const AvatarBlock = ({image, setImage, updateProfile}: AvatarProps) => {
             <TouchableOpacity
               style={[styles.button, styles.pickerButton]}
               onPress={() => setShowPhotoModal(false)}>
-              <Text style={[styles.buttonText, {color: '#87B71F'}]}>
+              <Text style={[styles.buttonText, {color: colors.success}]}>
                 Cancel
               </Text>
             </TouchableOpacity>
@@ -138,63 +143,62 @@ const AvatarBlock = ({image, setImage, updateProfile}: AvatarProps) => {
 
 export default AvatarBlock;
 
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    backgroundColor: '#3030309e',
-    gap: 8,
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingBottom: 25,
-  },
-  modalView: {
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 20,
-    padding: 35,
-    width: '100%',
-  },
-  buttonsView: {
-    backgroundColor: '#fff',
-    flexDirection: 'column',
-    width: '100%',
-    borderRadius: 15,
-  },
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    backgroundColor: '#blue',
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '500',
-    paddingVertical: 12,
-  },
-  pickerButton: {
-    borderStyle: 'solid',
-    borderColor: '#DEDEDE',
-  },
-  avatarIconWrapper: {
-    width: 38,
-    height: 38,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    backgroundColor: '#87B71F',
-    borderRadius: 50,
-  },
-  avatarBlock: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 12,
-  },
-});
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    centeredView: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      backgroundColor: '#3030309e',
+      gap: 8,
+      paddingLeft: 16,
+      paddingRight: 16,
+      paddingBottom: 25,
+    },
+    modalView: {
+      backgroundColor: colors.white,
+      paddingVertical: 12,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 20,
+      padding: 35,
+      width: '100%',
+    },
+    buttonsView: {
+      backgroundColor: colors.white,
+      flexDirection: 'column',
+      width: '100%',
+      borderRadius: 15,
+    },
+    button: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonText: {
+      fontSize: 16,
+      fontWeight: '500',
+      paddingVertical: 12,
+    },
+    pickerButton: {
+      borderStyle: 'solid',
+      borderColor: colors.grey1,
+    },
+    avatarIconWrapper: {
+      width: 38,
+      height: 38,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'absolute',
+      bottom: 0,
+      right: 0,
+      backgroundColor: colors.success,
+      borderRadius: 50,
+    },
+    avatarBlock: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 12,
+    },
+  });

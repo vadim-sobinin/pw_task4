@@ -14,14 +14,14 @@ import {AuthContext} from '../../../context/AuthContext';
 import {NavigationProps, PostsReqData, User} from '../../../@types/types';
 import Header from './Header';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-
-import useThemeCustom from '../../../hooks/useThemeCustom';
+import {Colors, useTheme} from '@rneui/themed';
 
 // @ts-ignore
 const Main = () => {
-  // const {colors} = useThemeCustom();
+  const {theme} = useTheme();
+  const colors = theme.colors;
 
-  // console.log(colors);
+  const styles = makeStyles(colors);
 
   const navigation = useNavigation<NavigationProps>();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -94,11 +94,12 @@ const Main = () => {
 
 export default Main;
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-  },
-  list: {
-    marginBottom: 160,
-  },
-});
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: colors.white,
+    },
+    list: {
+      marginBottom: 160,
+    },
+  });

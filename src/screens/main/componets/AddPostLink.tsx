@@ -1,10 +1,12 @@
 import {Pressable, StyleSheet} from 'react-native';
 import React from 'react';
-import {Icon} from '@rneui/themed';
+import {Icon, useTheme} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
 
 const AddPostLink = () => {
   const navigation = useNavigation();
+  const {theme} = useTheme();
+  const colors = theme.colors;
   return (
     <Pressable
       onPress={() => {
@@ -12,11 +14,11 @@ const AddPostLink = () => {
       }}
       style={({pressed}) => [
         {
-          backgroundColor: pressed ? '#303030' : '#87B71F',
+          backgroundColor: pressed ? colors.success : colors.primary,
         },
         styles.body,
       ]}>
-      <Icon name="add-outline" type="ionicon" color="#fff" size={24} />
+      <Icon name="add-outline" type="ionicon" color={colors.white} size={24} />
     </Pressable>
   );
 };

@@ -1,5 +1,6 @@
 import {Pressable, StyleSheet, Text} from 'react-native';
 import React from 'react';
+import {useTheme} from '@rneui/themed';
 
 const TextLink = ({
   children,
@@ -8,17 +9,19 @@ const TextLink = ({
   children: any;
   onPress?: () => void;
 }) => {
+  const {theme} = useTheme();
+  const colors = theme.colors;
   return (
     <Pressable
       onPress={onPress}
       style={({pressed}) => [
-        {borderBottomColor: pressed ? '#75C537' : '#B8DE64'},
+        {borderBottomColor: pressed ? colors.success : colors.primary},
         styles.underlineWrapper,
       ]}>
       {({pressed}) => (
         <Text
           style={[
-            pressed ? {color: '#75C537'} : {color: '#B8DE64'},
+            pressed ? {color: colors.success} : {color: colors.primary},
             styles.link,
           ]}>
           {children}

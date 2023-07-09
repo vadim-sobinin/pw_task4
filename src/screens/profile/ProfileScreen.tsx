@@ -1,7 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useContext, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Icon} from '@rneui/themed';
+import {Colors, Icon, useTheme} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps, User} from '../../@types/types';
 import {AuthContext} from '../../context/AuthContext';
@@ -51,6 +51,11 @@ const getRandomInt = (min: number, max: number) => {
 const ProfileScreen = () => {
   const navigation = useNavigation<NavigationProps>();
 
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
+
   // @ts-ignore
   const {userInfo, userToken, update}: {userInfo: User} =
     useContext(AuthContext);
@@ -67,7 +72,7 @@ const ProfileScreen = () => {
   const [newImage, setNewImage] = useState<imageType>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [date, setDate] = useState(userInfo.birthDate || new Date());
+  const [date, setDate] = useState(new Date());
 
   const [updateProfile] = useMutation(EDIT_PROFILE, {
     context: {
@@ -155,14 +160,19 @@ const ProfileScreen = () => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, marginRight: 16, marginLeft: 16}}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        paddingHorizontal: 16,
+        backgroundColor: colors.white,
+      }}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Profile</Text>
         <View style={styles.icon}>
           <Icon
             name="arrow-back"
             type="ionicon"
-            color="#131313"
+            color={colors.black}
             size={24}
             onPress={() => {
               navigation.goBack();
@@ -172,7 +182,7 @@ const ProfileScreen = () => {
         <TouchableOpacity
           style={styles.iconCross}
           onPress={handleSubmit(onSubmitPressed)}>
-          <Text>Done</Text>
+          <Text style={{color: colors.success}}>Done</Text>
         </TouchableOpacity>
       </View>
       <KeyboardShift>
@@ -206,36 +216,41 @@ const ProfileScreen = () => {
 
 export default ProfileScreen;
 
-const styles = StyleSheet.create({
-  header: {
-    position: 'relative',
-    // marginBottom: 28,
-  },
-  headerText: {
-    paddingBottom: 20,
-    paddingTop: 20,
-    paddingLeft: 40,
-    paddingRight: 40,
-    color: '#131313',
-    fontSize: 18,
-    fontWeight: '600',
-    alignSelf: 'center',
-  },
-  icon: {
-    position: 'absolute',
-    top: 20,
-    left: 0,
-    height: 24,
-    width: 24,
-  },
-  iconCross: {
-    position: 'absolute',
-    top: 19,
-    right: 0,
-    // height: 24,
-    // width: 24,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    header: {
+      position: 'relative',
+      // marginBottom: 28,
+    },
+    headerText: {
+      paddingBottom: 20,
+      paddingTop: 20,
+      paddingLeft: 40,
+      paddingRight: 40,
+      color: colors.black,
+      fontSize: 18,
+      fontWeight: '600',
+      alignSelf: 'center',
+    },
+    icon: {
+      position: 'absolute',
+      top: 20,
+      left: 0,
+      height: 24,
+      width: 24,
+    },
+    iconCross: {
+      position: 'absolute',
+      top: 19,
+      right: 0,
+      // height: 24,
+      // width: 24,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      color: colors.black,
+      borderBottomColor: colors.success,
+      borderBottomWidth: 1,
+      borderStyle: 'solid',
+    },
+  });

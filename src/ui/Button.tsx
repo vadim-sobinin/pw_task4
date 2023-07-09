@@ -1,5 +1,6 @@
 import {Pressable, StyleProp, StyleSheet, Text, ViewStyle} from 'react-native';
 import React from 'react';
+import {useTheme} from '@rneui/themed';
 
 const ButtonComponent = ({
   children,
@@ -12,13 +13,16 @@ const ButtonComponent = ({
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
 }) => {
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
   return (
     <Pressable
       onPress={onPress}
       disabled={disabled}
       style={({pressed}) => [
         {
-          backgroundColor: pressed ? '#B8DE64' : '#303030',
+          backgroundColor: pressed ? colors.success : colors.grey1,
         },
         styles.button,
         style,
@@ -27,8 +31,11 @@ const ButtonComponent = ({
         <Text
           style={
             disabled
-              ? [{color: '#696969'}, styles.text]
-              : [pressed ? {color: '#303030'} : {color: '#B8DE64'}, styles.text]
+              ? [{color: colors.grey4}, styles.text]
+              : [
+                  pressed ? {color: colors.grey1} : {color: colors.primary},
+                  styles.text,
+                ]
           }>
           {children}
         </Text>

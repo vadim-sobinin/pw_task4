@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {Avatar} from '@rneui/themed';
+import {Avatar, Colors, useTheme} from '@rneui/themed';
 import {useNavigation} from '@react-navigation/native';
 
 const noAvatarUrl =
@@ -14,6 +14,11 @@ const Header = ({
   avatarUrl: string | null;
 }) => {
   const navigation = useNavigation();
+
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
 
   return (
     <View style={styles.container}>
@@ -32,25 +37,27 @@ const Header = ({
 
 export default Header;
 
-const styles = StyleSheet.create({
-  container: {
-    marginLeft: 16,
-    marginRight: 16,
-    marginTop: 16,
-    marginBottom: 20,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  text: {
-    fontSize: 32,
-    lineHeight: 40,
-    fontWeight: '500',
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-});
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    container: {
+      marginLeft: 16,
+      marginRight: 16,
+      marginTop: 16,
+      marginBottom: 20,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    text: {
+      fontSize: 32,
+      lineHeight: 40,
+      fontWeight: '500',
+      color: colors.black,
+    },
+    avatar: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+    },
+  });

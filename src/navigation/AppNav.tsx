@@ -7,28 +7,20 @@ import {MyDrawer} from './NewNavigation';
 import DarkTheme from '../themes/DarkTheme';
 import DefaultTheme from '../themes/DefaultTheme';
 import {ThemeContext} from '../context/ThemeContext';
+import {ThemeCustomProvider} from '../themes/ThemeCustomProvider';
 
 const AppNav = () => {
   // @ts-ignore
   const {isLoading, userToken} = useContext(AuthContext);
 
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
-
-  const themeContext = useMemo(() => {
-    return {
-      isDarkTheme,
-      setIsDarkTheme,
-    };
-  }, [isDarkTheme]);
-
   if (isLoading) {
     return <Spinner />;
   }
   return (
-    <NavigationContainer theme={isDarkTheme ? DarkTheme : DefaultTheme}>
-      <ThemeContext.Provider value={themeContext}>
+    <NavigationContainer>
+      <ThemeCustomProvider>
         {userToken !== null ? <MyDrawer /> : <AuthStack />}
-      </ThemeContext.Provider>
+      </ThemeCustomProvider>
     </NavigationContainer>
   );
 };

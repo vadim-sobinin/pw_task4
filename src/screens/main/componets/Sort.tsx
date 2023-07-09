@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import React from 'react';
-import {ButtonGroup} from '@rneui/themed';
+import {ButtonGroup, Colors, useTheme} from '@rneui/themed';
 
 const Sort = ({
   selectedIndex,
@@ -9,6 +9,10 @@ const Sort = ({
   selectedIndex: number;
   setSelectedIndex: (index: number) => void;
 }) => {
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
   return (
     <ButtonGroup
       buttons={['New', 'Top']}
@@ -21,34 +25,36 @@ const Sort = ({
       buttonStyle={styles.button}
       selectedButtonStyle={styles.selectedButton}
       textStyle={styles.text}
+      selectedTextStyle={styles.selectedText}
     />
   );
 };
 
-const styles = StyleSheet.create({
-  selectedButton: {
-    backgroundColor: '#87B71F',
-  },
-  selectedText: {},
-  text: {
-    color: '#131313',
-    fontSize: 18,
-  },
-  button: {backgroundColor: '#F4F5F4'},
-  container: {
-    marginTop: 20,
-    marginBottom: 20,
-    marginRight: 16,
-    marginLeft: 16,
-    borderRadius: 16,
-    borderColor: 'rgba(158, 150, 150, 0)',
-    height: 50,
-  },
-  buttonContainerStyle: {
-    // paddingLeft: 10,
-    // borderRadius: 16,
-    // backgroundColor: '#ffff',
-  },
-});
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    selectedButton: {
+      backgroundColor: colors.primary,
+    },
+    selectedText: {color: colors.white},
+    text: {
+      color: colors.black,
+      fontSize: 18,
+    },
+    button: {backgroundColor: colors.grey0},
+    container: {
+      marginTop: 20,
+      marginBottom: 20,
+      marginRight: 16,
+      marginLeft: 16,
+      borderRadius: 16,
+      borderColor: colors.grey0,
+      height: 50,
+    },
+    buttonContainerStyle: {
+      // paddingLeft: 10,
+      // borderRadius: 16,
+      // backgroundColor: '#ffff',
+    },
+  });
 
 export default Sort;

@@ -4,11 +4,16 @@ import CustomInput from '../../../ui/CustomInput';
 
 import {formInputsType} from '../ProfileScreen';
 import {Control} from 'react-hook-form';
+import {Colors, useTheme} from '@rneui/themed';
 
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 const PHONE_REGEX = /^\+\d+$/;
 
 const AccountInfoBlock = ({control}: {control: Control<formInputsType>}) => {
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
   return (
     <View style={styles.formBlock}>
       <Text style={styles.infoBlockTitle}>Account Info</Text>
@@ -48,15 +53,16 @@ const AccountInfoBlock = ({control}: {control: Control<formInputsType>}) => {
 
 export default AccountInfoBlock;
 
-const styles = StyleSheet.create({
-  infoBlockTitle: {
-    color: '#131313',
-    fontSize: 18,
-    fontWeight: '500',
-    marginBottom: 16,
-  },
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    infoBlockTitle: {
+      color: colors.black,
+      fontSize: 18,
+      fontWeight: '500',
+      marginBottom: 16,
+    },
 
-  formBlock: {
-    marginTop: 32,
-  },
-});
+    formBlock: {
+      marginTop: 32,
+    },
+  });
