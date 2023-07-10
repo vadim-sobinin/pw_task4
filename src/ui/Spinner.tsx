@@ -4,7 +4,13 @@ import {useTheme} from '@rneui/themed';
 
 const Spinner = () => {
   const {theme} = useTheme();
-  const colors = theme.colors;
+  let colors = {
+    white: '#303030',
+  };
+  if (theme) {
+    colors = theme.colors;
+  }
+
   return (
     <View
       style={{

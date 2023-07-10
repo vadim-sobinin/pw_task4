@@ -4,10 +4,6 @@ import {AuthContext} from '../context/AuthContext';
 import AuthStack from './AuthStack';
 import Spinner from '../ui/Spinner';
 import {MyDrawer} from './NewNavigation';
-import DarkTheme from '../themes/DarkTheme';
-import DefaultTheme from '../themes/DefaultTheme';
-import {ThemeContext} from '../context/ThemeContext';
-import {ThemeCustomProvider} from '../themes/ThemeCustomProvider';
 
 const AppNav = () => {
   // @ts-ignore
@@ -18,9 +14,7 @@ const AppNav = () => {
   }
   return (
     <NavigationContainer>
-      <ThemeCustomProvider>
-        {userToken !== null ? <MyDrawer /> : <AuthStack />}
-      </ThemeCustomProvider>
+      {userToken !== null ? <MyDrawer /> : <AuthStack />}
     </NavigationContainer>
   );
 };

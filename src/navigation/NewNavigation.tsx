@@ -17,6 +17,7 @@ import CreatePost from '../screens/main/componets/CreatePost';
 import {AuthContext} from '../context/AuthContext';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import {User} from '../@types/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Drawer = createDrawerNavigator();
 
@@ -100,6 +101,8 @@ function CustomDrawerContent(props) {
     updateTheme(theme => ({
       mode: theme.mode === 'light' ? 'dark' : 'light',
     }));
+
+    AsyncStorage.setItem('mode', theme.mode === 'light' ? 'dark' : 'light');
   };
   const styles = makeStyles(colors);
 

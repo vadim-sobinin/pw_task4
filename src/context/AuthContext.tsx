@@ -1,6 +1,7 @@
 import React, {ReactNode, createContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {LoginData, RegData, User} from '../@types/types';
+import {useTheme} from '@rneui/themed';
 
 export const AuthContext = createContext('');
 
@@ -9,9 +10,10 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
   const [userToken, setUserToken] = useState<null | string>(null);
   const [userInfo, setUserInfo] = useState<null | User>(null);
 
+  const {updateTheme} = useTheme();
+
   const login = (data: LoginData) => {
     setIsLoading(true);
-    console.log(data.userSignIn.token);
     setUserToken(data.userSignIn.token);
     AsyncStorage.setItem('userToken', data.userSignIn.token);
     setUserInfo(data.userSignIn.user);
@@ -43,10 +45,8 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
 
   const isLoggedIn = async () => {
     try {
-      setIsLoading(true);
       let userToken = await AsyncStorage.getItem('userToken');
       setUserToken(userToken);
-      console.log(userToken);
       let userInfo = await AsyncStorage.getItem('userInfo');
       if (userInfo) {
         const userInfoParced = await JSON.parse(userInfo);
@@ -55,13 +55,32 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
     } catch (error) {
       console.log(`isLogged in error ${error}`);
     } finally {
-      setIsLoading(false);
+    }
+  };
+  const setTheme = async () => {
+    let currentTheme = await AsyncStorage.getItem('mode');
+
+    if (currentTheme === 'dark') {
+      updateTheme(() => ({
+        mode: 'dark',
+      }));
+    } else {
+      updateTheme(() => ({
+        mode: 'light',
+      }));
     }
   };
 
-  useEffect(() => {
-    isLoggedIn();
+  const preloadActions = async () => {
+    setIsLoading(true);
+    await setTheme();
+    await isLoggedIn();
     // logout();
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    preloadActions();
   }, []);
 
   return (

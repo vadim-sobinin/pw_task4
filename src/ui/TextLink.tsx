@@ -15,13 +15,13 @@ const TextLink = ({
     <Pressable
       onPress={onPress}
       style={({pressed}) => [
-        {borderBottomColor: pressed ? colors.success : colors.primary},
+        {borderBottomColor: pressed ? colors.success : '#B8DE64'},
         styles.underlineWrapper,
       ]}>
       {({pressed}) => (
         <Text
           style={[
-            pressed ? {color: colors.success} : {color: colors.primary},
+            pressed ? {color: colors.success} : {color: '#B8DE64'},
             styles.link,
           ]}>
           {children}

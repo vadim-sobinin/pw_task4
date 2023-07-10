@@ -8,13 +8,16 @@ import {RegData} from '../../@types/types';
 import {KeyboardShift} from '../../components/KeyboardShift';
 import {useForm} from 'react-hook-form';
 import {errorType} from '../login/components/LoginForm';
+import {useTheme} from '@rneui/themed';
 
 const RegisterScreen = ({navigation}: {navigation: any}) => {
   const {control, handleSubmit, setError, watch} = useForm();
 
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
   const [signUp] = useMutation(SING_UP, {
     onCompleted(data: RegData) {
-      console.log('onComplete');
       if (data.userSignUp.problem) {
         setError('email', {
           type: 'custom',
@@ -52,7 +55,7 @@ const RegisterScreen = ({navigation}: {navigation: any}) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <KeyboardShift>
         <View style={styles.container}>
           <RegisterForm control={control} watch={watch} />

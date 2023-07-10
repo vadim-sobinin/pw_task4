@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useState} from 'react';
-import {Icon} from '@rneui/themed';
+import {Colors, Icon, useTheme} from '@rneui/themed';
 import {AuthContext} from '../../../context/AuthContext';
 import Footer from './Footer';
 import {useMutation} from '@apollo/client';
@@ -18,6 +18,11 @@ const LoginForm = ({navigation}: {navigation: any}) => {
   const {control, handleSubmit, setError} = useForm();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
 
   // @ts-ignore
   const {login}: {login: (data: LoginData) => void} = useContext(AuthContext);
@@ -118,40 +123,41 @@ const LoginForm = ({navigation}: {navigation: any}) => {
 
 export default LoginForm;
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    paddingTop: 100,
-    display: 'flex',
-    gap: 124,
-    justifyContent: 'flex-end',
-    width: '100%',
-    height: '100%',
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    mainContainer: {
+      paddingTop: 100,
+      display: 'flex',
+      gap: 124,
+      justifyContent: 'flex-end',
+      width: '100%',
+      height: '100%',
 
-    paddingBottom: 42,
-    paddingLeft: 16,
-    paddingRight: 16,
-  },
-  container: {
-    flexGrow: 1,
+      paddingBottom: 42,
+      paddingLeft: 16,
+      paddingRight: 16,
+    },
+    container: {
+      flexGrow: 1,
 
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-  titleBlock: {
-    marginBottom: 40,
-  },
-  title: {
-    color: '#87B71F',
-    fontSize: 32,
-    lineHeight: 40,
-  },
-  subtitle: {
-    color: '#131313',
-    fontSize: 16,
-    lineHeight: 20,
-    marginTop: 3,
-  },
-  formBlock: {
-    marginBottom: 16,
-  },
-});
+      display: 'flex',
+      justifyContent: 'flex-end',
+    },
+    titleBlock: {
+      marginBottom: 40,
+    },
+    title: {
+      color: colors.primary,
+      fontSize: 32,
+      lineHeight: 40,
+    },
+    subtitle: {
+      color: colors.black,
+      fontSize: 16,
+      lineHeight: 20,
+      marginTop: 3,
+    },
+    formBlock: {
+      marginBottom: 16,
+    },
+  });

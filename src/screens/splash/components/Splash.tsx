@@ -1,9 +1,9 @@
-import { View, Alert, Text, StyleSheet } from 'react-native';
+import {View, Alert, Text, StyleSheet} from 'react-native';
 import React from 'react';
 import ButtonComponent from '../../../ui/Button';
 import TextLink from '../../../ui/TextLink';
 
-const Splash = ({ navigation }: { navigation: any }) => {
+const Splash = ({navigation}: {navigation: any}) => {
   const pressBtn = () => {
     Alert.alert('Hi');
   };
@@ -13,7 +13,9 @@ const Splash = ({ navigation }: { navigation: any }) => {
         <Text style={styles.text}>Already have an account?</Text>
         <TextLink onPress={() => navigation.navigate('Login')}>Log in</TextLink>
       </View>
-      <ButtonComponent onPress={() => navigation.navigate('Register')}>
+      <ButtonComponent
+        onPress={() => navigation.navigate('Register')}
+        style={styles.button}>
         Create an account
       </ButtonComponent>
     </View>
@@ -21,6 +23,10 @@ const Splash = ({ navigation }: { navigation: any }) => {
 };
 
 const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#303030',
+    color: '#B8DE64',
+  },
   container: {
     width: '100%',
     height: '100%',

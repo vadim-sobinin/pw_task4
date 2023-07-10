@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
-import {Icon} from '@rneui/themed';
+import {Colors, Icon, useTheme} from '@rneui/themed';
 import {Control, FieldValues, UseFormWatch} from 'react-hook-form';
 import CustomInput from '../../../ui/CustomInput';
 
@@ -12,6 +12,11 @@ type RegisterFormProps = {
 const RegisterForm = ({control, watch}: RegisterFormProps) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
+  const {theme} = useTheme();
+  const colors = theme.colors;
+
+  const styles = makeStyles(colors);
 
   return (
     <View style={styles.container}>
@@ -42,14 +47,14 @@ const RegisterForm = ({control, watch}: RegisterFormProps) => {
               <Icon
                 name="eye-outline"
                 type="ionicon"
-                color="#9B9B9B"
+                color={colors.grey3}
                 onPress={() => setPasswordVisible(false)}
               />
             ) : (
               <Icon
                 name="eye-off-outline"
                 type="ionicon"
-                color="#9B9B9B"
+                color={colors.grey3}
                 onPress={() => setPasswordVisible(true)}
               />
             )
@@ -75,14 +80,14 @@ const RegisterForm = ({control, watch}: RegisterFormProps) => {
               <Icon
                 name="eye-outline"
                 type="ionicon"
-                color="#9B9B9B"
+                color={colors.grey3}
                 onPress={() => setConfirmPasswordVisible(false)}
               />
             ) : (
               <Icon
                 name="eye-off-outline"
                 type="ionicon"
-                color="#9B9B9B"
+                color={colors.grey3}
                 onPress={() => setConfirmPasswordVisible(true)}
               />
             )
@@ -95,33 +100,34 @@ const RegisterForm = ({control, watch}: RegisterFormProps) => {
 
 export default RegisterForm;
 
-const styles = StyleSheet.create({
-  label: {
-    color: '#9B9B9B',
-    fontSize: 14,
-  },
-  input: {},
-  container: {
-    flexGrow: 1,
+const makeStyles = (colors: Colors) =>
+  StyleSheet.create({
+    label: {
+      color: colors.grey3,
+      fontSize: 14,
+    },
+    input: {},
+    container: {
+      flexGrow: 1,
 
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-  titleBlock: {
-    marginBottom: 40,
-  },
-  title: {
-    color: '#87B71F',
-    fontSize: 32,
-    lineHeight: 40,
-  },
-  subtitle: {
-    color: '#131313',
-    fontSize: 16,
-    lineHeight: 20,
-    marginTop: 3,
-  },
-  formBlock: {
-    marginBottom: 16,
-  },
-});
+      display: 'flex',
+      justifyContent: 'flex-end',
+    },
+    titleBlock: {
+      marginBottom: 40,
+    },
+    title: {
+      color: colors.primary,
+      fontSize: 32,
+      lineHeight: 40,
+    },
+    subtitle: {
+      color: colors.black,
+      fontSize: 16,
+      lineHeight: 20,
+      marginTop: 3,
+    },
+    formBlock: {
+      marginBottom: 16,
+    },
+  });

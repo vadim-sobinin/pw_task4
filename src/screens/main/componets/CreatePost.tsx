@@ -86,7 +86,7 @@ const CreatePost = () => {
       description: data.postText,
       title: data.title,
     };
-    // console.log(data);
+
     if (image) {
       try {
         const response = await axios({
