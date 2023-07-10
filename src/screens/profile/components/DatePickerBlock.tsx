@@ -94,37 +94,38 @@ const DatePickerBlock = ({
         />
       </Pressable>
 
-      <Modal
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: colors.white,
-        }}
-        animationType="fade"
-        transparent={true}
-        visible={showPicker}
-        onRequestClose={() => {
-          setShowPicker(!showPicker);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.datapickerTextBlock}>
-              <Text style={styles.datapickerText}>
-                Pick the date of your birth
-              </Text>
+      {Platform.OS === 'ios' ? (
+        <Modal
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: colors.white,
+          }}
+          animationType="fade"
+          transparent={true}
+          visible={showPicker}
+          onRequestClose={() => {
+            setShowPicker(!showPicker);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={styles.datapickerTextBlock}>
+                <Text style={styles.datapickerText}>
+                  Pick the date of your birth
+                </Text>
+              </View>
+
+              <DateTimePicker
+                mode="date"
+                display="spinner"
+                value={date}
+                onChange={onChange}
+                style={styles.datePicker}
+                maximumDate={new Date()}
+                textColor={colors.black}
+              />
             </View>
 
-            <DateTimePicker
-              mode="date"
-              display="spinner"
-              value={date}
-              onChange={onChange}
-              style={styles.datePicker}
-              maximumDate={new Date()}
-              textColor={colors.black}
-            />
-          </View>
-          {Platform.OS === 'ios' && (
             <View
               style={{
                 width: '100%',
@@ -155,9 +156,21 @@ const DatePickerBlock = ({
                 </TouchableOpacity>
               </View>
             </View>
-          )}
-        </View>
-      </Modal>
+          </View>
+        </Modal>
+      ) : (
+        showPicker && (
+          <DateTimePicker
+            mode="date"
+            display="spinner"
+            value={date}
+            onChange={onChange}
+            style={styles.datePicker}
+            maximumDate={new Date()}
+            textColor={colors.black}
+          />
+        )
+      )}
     </View>
   );
 };

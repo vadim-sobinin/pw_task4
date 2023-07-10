@@ -3,7 +3,6 @@ import {ApolloProvider} from '@apollo/client';
 import client from './src/apollo/client';
 import 'react-native-gesture-handler';
 import {AuthProvider} from './src/context/AuthContext';
-import SplashScreen from './src/screens/splash/SplashScreen';
 import {ThemeCustomProvider} from './src/themes/ThemeCustomProvider';
 
 export default function App() {
